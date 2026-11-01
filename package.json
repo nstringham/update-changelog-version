@@ -2,6 +2,22 @@
   "name": "update-changelog-version",
   "version": "3.1.1",
   "description": "Add a version & URL to your changelog",
+  "keywords": [
+    "changelog"
+  ],
+  "homepage": "https://github.com/nstringham/update-changelog-version#readme",
+  "bugs": {
+    "url": "https://github.com/nstringham/update-changelog-version/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Nate Stringham",
+    "url": "https://github.com/nstringham"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nstringham/update-changelog-version.git"
+  },
   "main": "index.js",
   "bin": "cli.js",
   "scripts": {
@@ -9,11 +25,6 @@
     "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md",
     "ci": "changelog-verify --unreleased CHANGELOG.md"
   },
-  "keywords": [
-    "changelog"
-  ],
-  "author": "Jess Telford <hi+npm@jes.st> (http://jes.st)",
-  "license": "ISC",
   "dependencies": {
     "bitbucket-url-from-git": "^1.0.0",
     "cross-spawn": "^4.0.2",
