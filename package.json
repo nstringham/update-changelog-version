@@ -18,8 +18,8 @@
     "type": "git",
     "url": "git+https://github.com/nstringham/update-changelog-version.git"
   },
-  "main": "index.js",
   "bin": "cli.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha test/",
     "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md",
