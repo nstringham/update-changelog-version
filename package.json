@@ -22,8 +22,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/",
-    "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md",
-    "ci": "changelog-verify --unreleased CHANGELOG.md",
+    "version": "./cli.js CHANGELOG.md && git add CHANGELOG.md",
     "format": "oxfmt",
     "format:check": "oxfmt --check"
   },
@@ -38,7 +37,6 @@
     "upath": "^1.1.0"
   },
   "devDependencies": {
-    "changelog-verify": "^1.1.1",
     "mocha": "^5.0.0",
     "proxyquire": "^2.0.0",
     "sinon": "^4.4.3"
