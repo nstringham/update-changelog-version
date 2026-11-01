@@ -1,11 +1,12 @@
+import { beforeEach, describe, it, vi } from "vitest";
+
 var upath = require("upath");
 var assert = require("assert");
 var hasYarn = require("has-yarn");
 var spawn = require("cross-spawn");
 var proxyquire = require("proxyquire");
-var sinon = require("sinon");
 
-var gitRemote = sinon.stub();
+var gitRemote = vi.fn();
 
 var versionChangelog = proxyquire("../index", { "./util/git-remote": gitRemote });
 
@@ -33,30 +34,31 @@ if (!versionPrefix) {
 
 describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () {
   beforeEach(() => {
-    gitRemote.reset();
-    gitRemote.returns("git@github.com:nstringham/update-changelog-version.git");
+    gitRemote.mockClear();
+    gitRemote.mockReturnValue("git@github.com:nstringham/update-changelog-version.git");
   });
 
-  it.skip("Handles a non-git repo correctly", function (done) {
+  it.skip("Handles a non-git repo correctly", function () {
     // TODO: Test when the `.git` folder doesn't exist
   });
 
-  it("Correctly adds a new version", function (done) {
-    versionChangelog(
-      `
+  it("Correctly adds a new version", function () {
+    return new Promise((resolve, reject) => {
+      versionChangelog(
+        `
 # Changelog
 
 ## [Unreleased][]
 - Foo
-      `.trim(),
-      {
-        version: "1.0.0",
-      },
-      function (error, data) {
-        assert.ifError(error);
-        assert.equal(
-          data,
-          `
+        `.trim(),
+        {
+          version: "1.0.0",
+        },
+        function (error, data) {
+          assert.ifError(error);
+          assert.equal(
+            data,
+            `
 # Changelog
 
 ## [Unreleased][]
@@ -66,17 +68,19 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 
 [Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...HEAD
 [1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
-        `.trim(),
-        );
+          `.trim(),
+          );
 
-        done();
-      },
-    );
+          resolve();
+        },
+      );
+    });
   });
 
-  it("Correctly updates old unreleased sections", function (done) {
-    versionChangelog(
-      `
+  it("Correctly updates old unreleased sections", function () {
+    return new Promise((resolve, reject) => {
+      versionChangelog(
+        `
 # Changelog
 
 ## [Unreleased][]
@@ -88,15 +92,15 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 [Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...HEAD
 [1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
 
-      `.trim(),
-      {
-        version: "2.0.0",
-      },
-      function (error, data) {
-        assert.ifError(error);
-        assert.equal(
-          data,
-          `
+        `.trim(),
+        {
+          version: "2.0.0",
+        },
+        function (error, data) {
+          assert.ifError(error);
+          assert.equal(
+            data,
+            `
 # Changelog
 
 ## [Unreleased][]
@@ -110,33 +114,35 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 [Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}2.0.0...HEAD
 [2.0.0]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...${versionPrefix}2.0.0
 [1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
-        `.trim(),
-        );
+          `.trim(),
+          );
 
-        done();
-      },
-    );
+          resolve();
+        },
+      );
+    });
   });
 
   describe("gitlab", function () {
-    it("Correctly adds a new gitlab version", function (done) {
-      gitRemote.returns("git@gitlab.com:nstringham/update-changelog-version.git");
-      versionChangelog(
-        `
+    it("Correctly adds a new gitlab version", function () {
+      return new Promise((resolve, reject) => {
+        gitRemote.mockReturnValue("git@gitlab.com:nstringham/update-changelog-version.git");
+        versionChangelog(
+          `
 # Changelog
 
 ## [Unreleased][]
 - Foo
-        `.trim(),
-        {
-          version: "1.0.0",
-          remote: "gitlab",
-        },
-        function (error, data) {
-          assert.ifError(error);
-          assert.equal(
-            data,
-            `
+          `.trim(),
+          {
+            version: "1.0.0",
+            remote: "gitlab",
+          },
+          function (error, data) {
+            assert.ifError(error);
+            assert.equal(
+              data,
+              `
 # Changelog
 
 ## [Unreleased][]
@@ -146,17 +152,19 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 
 [Unreleased]: http://gitlab.com/nstringham/update-changelog-version/compare/master...${versionPrefix}1.0.0
 [1.0.0]: http://gitlab.com/nstringham/update-changelog-version/tags/${versionPrefix}1.0.0
-          `.trim(),
-          );
+            `.trim(),
+            );
 
-          done();
-        },
-      );
+            resolve();
+          },
+        );
+      });
     });
 
-    it("Correctly updates old unreleased sections with gitlab urls", function (done) {
-      versionChangelog(
-        `
+    it("Correctly updates old unreleased sections with gitlab urls", function () {
+      return new Promise((resolve, reject) => {
+        versionChangelog(
+          `
 # Changelog
 
 ## [Unreleased][]
@@ -168,16 +176,16 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 [Unreleased]: http://gitlab.com/nstringham/update-changelog-version/compare/master...${versionPrefix}1.0.0
 [1.0.0]: http://gitlab.com/nstringham/update-changelog-version/tags/${versionPrefix}1.0.0
 
-        `.trim(),
-        {
-          version: "2.0.0",
-          remote: "gitlab",
-        },
-        function (error, data) {
-          assert.ifError(error);
-          assert.equal(
-            data,
-            `
+          `.trim(),
+          {
+            version: "2.0.0",
+            remote: "gitlab",
+          },
+          function (error, data) {
+            assert.ifError(error);
+            assert.equal(
+              data,
+              `
 # Changelog
 
 ## [Unreleased][]
@@ -191,34 +199,36 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 [Unreleased]: http://gitlab.com/nstringham/update-changelog-version/compare/master...${versionPrefix}2.0.0
 [2.0.0]: http://gitlab.com/nstringham/update-changelog-version/compare/${versionPrefix}2.0.0...${versionPrefix}1.0.0
 [1.0.0]: http://gitlab.com/nstringham/update-changelog-version/tags/${versionPrefix}1.0.0
-          `.trim(),
-          );
+            `.trim(),
+            );
 
-          done();
-        },
-      );
+            resolve();
+          },
+        );
+      });
     });
   });
 
   describe("bitbucket", function () {
-    it("Correctly adds a new bitbucket version", function (done) {
-      gitRemote.returns("git@bitbucket.org:nstringham/update-changelog-version.git");
-      versionChangelog(
-        `
+    it("Correctly adds a new bitbucket version", function () {
+      return new Promise((resolve, reject) => {
+        gitRemote.mockReturnValue("git@bitbucket.org:nstringham/update-changelog-version.git");
+        versionChangelog(
+          `
 # Changelog
 
 ## [Unreleased][]
 - Foo
-        `.trim(),
-        {
-          version: "1.0.0",
-          remote: "bitbucket",
-        },
-        function (error, data) {
-          assert.ifError(error);
-          assert.equal(
-            data,
-            `
+          `.trim(),
+          {
+            version: "1.0.0",
+            remote: "bitbucket",
+          },
+          function (error, data) {
+            assert.ifError(error);
+            assert.equal(
+              data,
+              `
 # Changelog
 
 ## [Unreleased][]
@@ -228,17 +238,19 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 
 [Unreleased]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/master%0D${versionPrefix}1.0.0
 [1.0.0]: https://bitbucket.org/nstringham/update-changelog-version/commits/tag/${versionPrefix}1.0.0
-          `.trim(),
-          );
+            `.trim(),
+            );
 
-          done();
-        },
-      );
+            resolve();
+          },
+        );
+      });
     });
 
-    it("Correctly updates old unreleased sections with bitbucket urls", function (done) {
-      versionChangelog(
-        `
+    it("Correctly updates old unreleased sections with bitbucket urls", function () {
+      return new Promise((resolve, reject) => {
+        versionChangelog(
+          `
 # Changelog
 
 ## [Unreleased][]
@@ -250,16 +262,16 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 [Unreleased]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/master%0D${versionPrefix}1.0.0
 [1.0.0]: https://bitbucket.org/nstringham/update-changelog-version/commits/tag/${versionPrefix}1.0.0
 
-        `.trim(),
-        {
-          version: "2.0.0",
-          remote: "bitbucket",
-        },
-        function (error, data) {
-          assert.ifError(error);
-          assert.equal(
-            data,
-            `
+          `.trim(),
+          {
+            version: "2.0.0",
+            remote: "bitbucket",
+          },
+          function (error, data) {
+            assert.ifError(error);
+            assert.equal(
+              data,
+              `
 # Changelog
 
 ## [Unreleased][]
@@ -273,30 +285,32 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 [Unreleased]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/master%0D${versionPrefix}2.0.0
 [2.0.0]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/${versionPrefix}2.0.0%0D${versionPrefix}1.0.0
 [1.0.0]: https://bitbucket.org/nstringham/update-changelog-version/commits/tag/${versionPrefix}1.0.0
-          `.trim(),
-          );
+            `.trim(),
+            );
 
-          done();
-        },
-      );
+            resolve();
+          },
+        );
+      });
     });
   });
 
-  it("Correctly handles empty Unreleased section", function (done) {
-    versionChangelog(
-      `
+  it("Correctly handles empty Unreleased section", function () {
+    return new Promise((resolve, reject) => {
+      versionChangelog(
+        `
 # Changelog
 
 ## [Unreleased][]
-      `.trim(),
-      {
-        version: "1.0.0",
-      },
-      function (error, data) {
-        assert.ifError(error);
-        assert.equal(
-          data,
-          `
+        `.trim(),
+        {
+          version: "1.0.0",
+        },
+        function (error, data) {
+          assert.ifError(error);
+          assert.equal(
+            data,
+            `
 # Changelog
 
 ## [Unreleased][]
@@ -305,17 +319,19 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 
 [Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...HEAD
 [1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
-        `.trim(),
-        );
+          `.trim(),
+          );
 
-        done();
-      },
-    );
+          resolve();
+        },
+      );
+    });
   });
 
-  it("Correctly skips old versions for links", function (done) {
-    versionChangelog(
-      `
+  it("Correctly skips old versions for links", function () {
+    return new Promise((resolve, reject) => {
+      versionChangelog(
+        `
 # Changelog
 
 ## [Unreleased][]
@@ -323,15 +339,15 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 
 ## [1.0.0][] - 2016-10-10
 - Bar
-      `.trim(),
-      {
-        version: "2.0.0",
-      },
-      function (error, data) {
-        assert.ifError(error);
-        assert.equal(
-          data,
-          `
+        `.trim(),
+        {
+          version: "2.0.0",
+        },
+        function (error, data) {
+          assert.ifError(error);
+          assert.equal(
+            data,
+            `
 # Changelog
 
 ## [Unreleased][]
@@ -344,11 +360,12 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
 
 [Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}2.0.0...HEAD
 [2.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}2.0.0
-        `.trim(),
-        );
+          `.trim(),
+          );
 
-        done();
-      },
-    );
+          resolve();
+        },
+      );
+    });
   });
 });

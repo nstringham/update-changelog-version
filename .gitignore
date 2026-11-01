@@ -50,3 +50,6 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Vitest reports and artifacts
+.vitest/
