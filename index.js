@@ -6,6 +6,7 @@ var githubUrlFromGit = require('github-url-from-git');
 var bitbucketUrlFromGit = require('bitbucket-url-from-git');
 var gitlabUrlFromGit = require('giturl').parse;
 var hasYarn = require('has-yarn');
+var hasPnpm = require('./util/has-pnpm.js');
 var gitRemote = require('./util/git-remote');
 
 function dateWithLeadingZero(date) {
@@ -26,13 +27,19 @@ function insertHeading(data, versionString) {
 function getVersionPrefix() {
   var output = null;
   var versionPrefix = 'v';
-  if (hasYarn()) {
+  if (hasPnpm()) {
+    console.log('Using pnpm to get version tag prefix');
+    output = spawn.sync('pnpm', ['config', 'get', 'version-tag-prefix']);
+  } else if (hasYarn()) {
     output = spawn.sync('yarn', ['config', 'get', 'version-tag-prefix']);
   } else {
     output = spawn.sync('npm', ['config', 'get', 'tag-version-prefix']);
   }
   if (output.stdout && !output.error) {
     versionPrefix = output.stdout.toString().trim();
+  }
+  if (versionPrefix === String(undefined)) {
+    versionPrefix = 'v';
   }
   return versionPrefix;
 }
