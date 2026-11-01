@@ -1,30 +1,24 @@
-# Version Changelog [![CircleCI](https://circleci.com/gh/jesstelford/version-changelog.svg?style=svg)](https://circleci.com/gh/jesstelford/version-changelog)
+# Update Changelog Version
 
 Add a version & URL to your `CHANGELOG.md`.
 
-Goes great with [`changelog-verify`](https://github.com/jesstelford/changelog-verify).
 Add this to your `package.json`:
 
 ```json
 {
   "scripts": {
-    "version": "version-changelog CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md"
+    "version": "update-changelog-version CHANGELOG.md && git add CHANGELOG.md"
   }
 }
 ```
 
-Now whenever you execute `npm version`
-(or [`np`](https://github.com/sindresorhus/np)),
-your `CHANGELOG.md` will be given the correct version info,
-checked for validity
-(did you forget to add changelog notes?)
-then added to the release commit.
+Now whenever you execute `npm version`, your `CHANGELOG.md` will be given the correct version info and added to the release commit.
 
 ## Usage
 
 Given the following `./CHANGELOG.md`
 
-```markdown
+```md
 # Changelog
 
 ## [Unreleased][]
@@ -47,13 +41,12 @@ And `package.json`
 Executing the versioning script
 
 ```bash
-version-changelog ./CHANGELOG.md
+update-changelog-version ./CHANGELOG.md
 ```
 
-Will return success (`0`),
-and update `CHANGELOG.md` to:
+Will return success (`0`) and update `CHANGELOG.md` to:
 
-```markdown
+```md
 # Changelog
 
 ## [Unreleased][]
@@ -91,12 +84,13 @@ Where `<version number>` is the more recently previous release of this module.
 ## Options
 
 The cli takes two optional parameters:
+
 - the changelog filename
 - the remote code repository (`github`, `gitlab`, or `bitbucket` - used to
   generate URL's for versions). Default: `github`
 
 ```
-version-changelog [filename] [--remote=bitbucket|gitlab|github]
+update-changelog-version [filename] [--remote=bitbucket|gitlab|github]
 ```
 
 `filename` can be a path relative to the current working directory,

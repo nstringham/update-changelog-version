@@ -15,7 +15,7 @@ function padWithZero(num) {
 
 const date = new Date();
 const todayDate = date.getFullYear() + '-' + padWithZero(date.getMonth() + 1) + '-' + padWithZero(date.getDate());
-const repoBase = 'https://github.com/jesstelford/';
+const repoBase = 'https://github.com/nstringham/';
 
 let versionPrefix = '';
 let prefixType = '';
@@ -35,7 +35,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
   beforeEach(() => {
     gitRemote.reset();
-    gitRemote.returns('git@github.com:jesstelford/version-changelog.git');
+    gitRemote.returns('git@github.com:nstringham/update-changelog-version.git');
   });
 
   it.skip('Handles a non-git repo correctly', function(done) {
@@ -65,8 +65,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - ${todayDate}
 - Foo
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...HEAD
-[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
+[Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...HEAD
+[1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
         `.trim());
 
         done();
@@ -87,8 +87,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...HEAD
-[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
+[Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...HEAD
+[1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
 
       `.trim(),
       {
@@ -108,9 +108,9 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...HEAD
-[2.0.0]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...${versionPrefix}2.0.0
-[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
+[Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}2.0.0...HEAD
+[2.0.0]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...${versionPrefix}2.0.0
+[1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
         `.trim());
 
         done();
@@ -123,7 +123,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
     it('Correctly adds a new gitlab version', function(done) {
 
-      gitRemote.returns('git@gitlab.com:jesstelford/version-changelog.git');
+      gitRemote.returns('git@gitlab.com:nstringham/update-changelog-version.git');
       versionChangelog(
         `
 # Changelog
@@ -146,8 +146,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - ${todayDate}
 - Foo
 
-[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}1.0.0
-[1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
+[Unreleased]: http://gitlab.com/nstringham/update-changelog-version/compare/master...${versionPrefix}1.0.0
+[1.0.0]: http://gitlab.com/nstringham/update-changelog-version/tags/${versionPrefix}1.0.0
           `.trim());
 
           done();
@@ -168,8 +168,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}1.0.0
-[1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
+[Unreleased]: http://gitlab.com/nstringham/update-changelog-version/compare/master...${versionPrefix}1.0.0
+[1.0.0]: http://gitlab.com/nstringham/update-changelog-version/tags/${versionPrefix}1.0.0
 
         `.trim(),
         {
@@ -190,9 +190,9 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}2.0.0
-[2.0.0]: http://gitlab.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...${versionPrefix}1.0.0
-[1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
+[Unreleased]: http://gitlab.com/nstringham/update-changelog-version/compare/master...${versionPrefix}2.0.0
+[2.0.0]: http://gitlab.com/nstringham/update-changelog-version/compare/${versionPrefix}2.0.0...${versionPrefix}1.0.0
+[1.0.0]: http://gitlab.com/nstringham/update-changelog-version/tags/${versionPrefix}1.0.0
           `.trim());
 
           done();
@@ -207,7 +207,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
     it('Correctly adds a new bitbucket version', function(done) {
 
-      gitRemote.returns('git@bitbucket.org:jesstelford/version-changelog.git');
+      gitRemote.returns('git@bitbucket.org:nstringham/update-changelog-version.git');
       versionChangelog(
         `
 # Changelog
@@ -230,8 +230,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - ${todayDate}
 - Foo
 
-[Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}1.0.0
-[1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
+[Unreleased]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/master%0D${versionPrefix}1.0.0
+[1.0.0]: https://bitbucket.org/nstringham/update-changelog-version/commits/tag/${versionPrefix}1.0.0
           `.trim());
 
           done();
@@ -252,8 +252,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}1.0.0
-[1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
+[Unreleased]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/master%0D${versionPrefix}1.0.0
+[1.0.0]: https://bitbucket.org/nstringham/update-changelog-version/commits/tag/${versionPrefix}1.0.0
 
         `.trim(),
         {
@@ -274,9 +274,9 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}2.0.0
-[2.0.0]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/${versionPrefix}2.0.0%0D${versionPrefix}1.0.0
-[1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
+[Unreleased]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/master%0D${versionPrefix}2.0.0
+[2.0.0]: https://bitbucket.org/nstringham/update-changelog-version/branches/compare/${versionPrefix}2.0.0%0D${versionPrefix}1.0.0
+[1.0.0]: https://bitbucket.org/nstringham/update-changelog-version/commits/tag/${versionPrefix}1.0.0
           `.trim());
 
           done();
@@ -308,8 +308,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
 ## [1.0.0][] - ${todayDate}
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...HEAD
-[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
+[Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}1.0.0...HEAD
+[1.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}1.0.0
         `.trim());
 
         done();
@@ -347,8 +347,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...HEAD
-[2.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}2.0.0
+[Unreleased]: https://github.com/nstringham/update-changelog-version/compare/${versionPrefix}2.0.0...HEAD
+[2.0.0]: https://github.com/nstringham/update-changelog-version/tree/${versionPrefix}2.0.0
         `.trim());
 
         done();
