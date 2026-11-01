@@ -18,7 +18,7 @@ const todayDate = date.getFullYear() + "-" + padWithZero(date.getMonth() + 1) + 
 const repoBase = "https://github.com/nstringham/";
 
 let versionPrefix = "";
-let prefixType = "";
+let prefixSource = "";
 if (hasYarn()) {
   versionPrefix = spawn.sync("yarn", ["config", "get", "version-tag-prefix"]).stdout.toString().trim();
   prefixSource = "yarn config get version-tag-prefix";
