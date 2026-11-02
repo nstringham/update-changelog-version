@@ -33,7 +33,6 @@ function getVersionPrefix() {
   var output = null;
   var versionPrefix = "v";
   if (hasPnpm()) {
-    console.log("Using pnpm to get version tag prefix");
     output = spawn.sync("pnpm", ["config", "get", "version-tag-prefix"]);
   } else if (hasYarn()) {
     output = spawn.sync("yarn", ["config", "get", "version-tag-prefix"]);
