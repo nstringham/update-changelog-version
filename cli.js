@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// @ts-check
+
 var fs = require("fs");
 var upath = require("upath");
 var versionChangelog = require("./index");
@@ -31,7 +33,7 @@ versionChangelog(data, { version: version, remote: remote }, function (error, da
     process.exit(1);
   }
 
-  fs.writeFileSync(fileName, data, "utf8");
+  fs.writeFileSync(fileName, /** @type {string} */ (data), "utf8");
 
   process.exit(0);
 });

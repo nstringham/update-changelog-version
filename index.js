@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// @ts-check
+
 var fs = require("fs");
 var spawn = require("cross-spawn");
 var githubUrlFromGit = require("github-url-from-git");
@@ -9,10 +11,21 @@ var hasYarn = require("has-yarn");
 var hasPnpm = require("./util/has-pnpm.js");
 var gitRemote = require("./util/git-remote");
 
+/**
+ * Pads the start of a number with a leading zero to make it two digits.
+ * @argument {number} date
+ * @returns {string}
+ */
 function dateWithLeadingZero(date) {
   return ("0" + date).slice(-2);
 }
 
+/**
+ * Replaces the "Unreleased" heading with a new version heading including the date.
+ * @argument {string} data The changelog markdown
+ * @argument {string} versionString The new version
+ * @returns {string} The updated changelog markdown
+ */
 function insertHeading(data, versionString) {
   var date = new Date();
 
@@ -29,6 +42,10 @@ function insertHeading(data, versionString) {
   );
 }
 
+/**
+ * gets the version tag prefix from the package manager configuration
+ * @returns {string} The version tag prefix (defaults to "v")
+ */
 function getVersionPrefix() {
   var output = null;
   var versionPrefix = "v";
@@ -48,6 +65,14 @@ function getVersionPrefix() {
   return versionPrefix;
 }
 
+/** @typedef {{unreleased: string, previous: string}} UriResult */
+
+/**
+ * Gets the GitHub URLs for the unreleased and previous versions.
+ * @param {string} data The changelog markdown
+ * @param {string} newVersion The new version
+ * @returns {UriResult} The GitHub URLs for the unreleased and previous versions
+ */
 function githubUris(data, newVersion) {
   var remoteUrl;
   var previousVersion;
@@ -78,6 +103,12 @@ function githubUris(data, newVersion) {
   };
 }
 
+/**
+ * Gets the Bitbucket URLs for the unreleased and previous versions.
+ * @param {string} data The changelog markdown
+ * @param {string} newVersion The new version
+ * @returns {UriResult} The Bitbucket URLs for the unreleased and previous versions
+ */
 function bitbucketUris(data, newVersion) {
   var remoteUrl;
   var previousVersion;
@@ -109,6 +140,12 @@ function bitbucketUris(data, newVersion) {
   };
 }
 
+/**
+ * Gets the GitLab URLs for the unreleased and previous versions.
+ * @param {string} data The changelog markdown
+ * @param {string} newVersion The new version
+ * @returns {UriResult} The GitLab URLs for the unreleased and previous versions
+ */
 function gitlabUris(data, newVersion) {
   var remoteUrl;
   var previousVersion;
@@ -140,12 +177,21 @@ function gitlabUris(data, newVersion) {
   };
 }
 
+/** @typedef {"github" | "gitlab" | "bitbucket"} Remote */
+
 const UriFunctions = {
   github: githubUris,
   gitlab: gitlabUris,
   bitbucket: bitbucketUris,
 };
 
+/**
+ * Updates the urls of the changelog for the given version and remote repository
+ * @param {string} data The changelog markdown
+ * @param {string} versionString The new version
+ * @param {Remote} remote The remote repository type
+ * @returns {string} The updated changelog markdown
+ */
 function updateCompareUri(data, versionString, remote) {
   var remoteUrl;
   var uris = UriFunctions[remote](data, versionString);
@@ -157,6 +203,12 @@ function updateCompareUri(data, versionString, remote) {
   return data + "\n\n" + uris.unreleased + "\n" + uris.previous;
 }
 
+/**
+ * Update the changelog with the new version and remote repository URLs
+ * @param {string} data the changelog markdown
+ * @param {{version: string, remote: Remote}} version The version and remote repository type
+ * @param {(error: Error|null, data?: string) => void} done The callback function
+ */
 module.exports = function versionChangelog(data, { version, remote }, done) {
   try {
     // Add the heading for the new version number
@@ -168,7 +220,7 @@ module.exports = function versionChangelog(data, { version, remote }, done) {
 
     done(null, data);
   } catch (error) {
-    done(error);
+    done(/** @type {Error} */ (error));
   }
 };
 

@@ -1,3 +1,7 @@
+"use strict";
+
+// @ts-check
+
 import { beforeEach, describe, it, vi } from "vitest";
 
 var upath = require("upath");
@@ -8,8 +12,14 @@ var proxyquire = require("proxyquire");
 
 var gitRemote = vi.fn();
 
+/** @type {import("../index")} */
 var versionChangelog = proxyquire("../index", { "./util/git-remote": gitRemote });
 
+/**
+ * Pads a number with a leading zero if it is less than 10
+ * @param {number} num
+ * @returns {string}
+ */
 function padWithZero(num) {
   return num < 10 ? "0" + num : num;
 }
