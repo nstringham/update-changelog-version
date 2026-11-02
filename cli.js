@@ -2,11 +2,12 @@
 
 // @ts-check
 
-var fs = require("fs");
-var upath = require("upath");
-var versionChangelog = require("./index");
-var packageJson = require(upath.join(process.cwd(), "package.json"));
-var minimist = require("minimist");
+import fs from "fs";
+import upath from "upath";
+import versionChangelog from "./index.js";
+import minimist from "minimist";
+
+const packageJson = require(upath.join(process.cwd(), "package.json"));
 
 var argv = minimist(process.argv.slice(2));
 

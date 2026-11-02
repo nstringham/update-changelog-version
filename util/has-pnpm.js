@@ -1,13 +1,13 @@
-"use strict";
-
 // @ts-check
 
-const path = require("path");
-const fs = require("fs");
+import path from "path";
+import fs from "fs";
 
 /**
  * Checks if the current project uses pnpm by looking for a pnpm-lock.yaml file
  * @param {string} [cwd]
  * @returns {boolean}
  */
-module.exports = (cwd) => fs.existsSync(path.resolve(cwd || process.cwd(), "pnpm-lock.yaml"));
+export default function hasPnpm(cwd) {
+  return fs.existsSync(path.resolve(cwd || process.cwd(), "pnpm-lock.yaml"));
+}

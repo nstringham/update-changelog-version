@@ -19,6 +19,7 @@
     "url": "git+https://github.com/nstringham/update-changelog-version.git"
   },
   "bin": "cli.js",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "vitest",
@@ -39,7 +40,6 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^5.0.5",
     "oxfmt": "^0.75.0",
-    "proxyquire": "^2.0.0",
     "vitest": "^5.0.5"
   },
   "devEngines": {

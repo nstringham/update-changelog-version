@@ -235,9 +235,6 @@ importers:
       oxfmt:
         specifier: ^0.75.0
         version: 0.75.0
-      proxyquire:
-        specifier: ^2.0.0
-        version: 2.0.0
       vitest:
         specifier: ^5.0.5
         version: 5.0.5(@vitest/coverage-v8@5.0.5)(vite@8.3.5)
@@ -579,10 +576,6 @@ packages:
       picomatch:
         optional: true
 
-  fill-keys@1.0.2:
-    resolution: {integrity: sha512-tcgI872xXjwFF4xgQmLxi76GnwJG3g/3isB1l4/G5Z4zrbddGpBjqZCO9oEAcB5wX0Hj/5iQB3toxfO7in1hHA==}
-    engines: {node: '>=0.10.0'}
-
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -598,9 +591,6 @@ packages:
   has-yarn@1.0.0:
     resolution: {integrity: sha512-UAI4b48aqrdez88CwMfC9s+gcJ25O1qg0/hS5eKOsIF5tOw2EYcgGsryYF6TEI5G8SeCYzFBt5Z04D/BDABYSQ==}
     engines: {node: '>=4'}
-
-  is-object@1.0.1:
-    resolution: {integrity: sha512-+XzmTRB/JXoIdK20Ge8K8PRsP5UlthLaVhIRxzIwQ73jRgER8iRw98DilvERx/tSjOHLy9JM4sKUfLRMB5ui0Q==}
 
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
@@ -691,14 +681,8 @@ packages:
   magicast@0.5.5:
     resolution: {integrity: sha512-UicdXN8zQ3JHlxVq+28afMXPr1z7WNY6+7EJnzTdQWkTAlMLF5fNCCKxJHBQwGaNGR11581EiQmQzx73+MvszA==}
 
-  merge-descriptors@1.0.1:
-    resolution: {integrity: sha512-cCi6g3/Zr1iqQi6ySbseM1Xvooa98N0w31jzUYrXPX2xqObmFGHJ0tQ5u74H3mVh7wLouTseZyYIq39g8cNp1w==}
-
   minimist@1.2.0:
     resolution: {integrity: sha512-7Wl+Jz+IGWuSdgsQEJ4JunV0si/iMhg42MnQQG6h1R6TNeVenp4U9x5CC5v/gYqz/fENLQITAWXidNtVL0NNbw==}
-
-  module-not-found-error@1.0.1:
-    resolution: {integrity: sha512-pEk4ECWQXV6z2zjhRZUongnLJNUeGQJ3w6OQ5ctGwD+i5o93qjRQUk2Rt6VdNeu3sEP0AB4LcfvdebpxBRVr4g==}
 
   nanoid@3.3.20:
     resolution: {integrity: sha512-uKdg2G3GNCKQn9byYOpxbGqrT2fGO5KRt5J/8b3pok8rT6qxGWF6hxMyJiEYtAf+FVyYuD9hRaDqX5uPFYJ4ZQ==}
@@ -736,14 +720,8 @@ packages:
     resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
     engines: {node: ^10 || ^12 || >=14}
 
-  proxyquire@2.0.0:
-    resolution: {integrity: sha512-TO9TAIz0mpa+SKddXsgCFatoe/KmHvoNVj2jDMC1kXE6kKn7/4CRpxvQ+0wAK9sbMT2FVO89qItlvnZMcFbJ2Q==}
-
   pseudomap@1.0.2:
     resolution: {integrity: sha512-b/YwNhb8lk1Zz2+bXXpS/LK9OisiZZ1SNsSLxN1x2OXVEhW2Ckr/7mWE5vrC1ZTiJlD9g19jWszTmJsB+oEpFQ==}
-
-  resolve@1.1.7:
-    resolution: {integrity: sha512-9znBF0vBcaSN3W2j7wKvdERPwqTxSpCq+if5C0WoTCyV9n24rua28jeuQ2pL/HOf+yUe/Mef+H/5p60K0Id3bg==}
 
   rolldown@1.2.16:
     resolution: {integrity: sha512-bWvlMpFKiTfDKfnK7FC2MPgPeWCf/Kpwsq49ApdW+FQaBZb6O6dZ4MAPbPUjp7hYQrw/RobqCzn64BRrQecGHw==}
@@ -1078,11 +1056,6 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.7
 
-  fill-keys@1.0.2:
-    dependencies:
-      is-object: 1.0.1
-      merge-descriptors: 1.0.1
-
   fsevents@2.3.3:
     optional: true
 
@@ -1091,8 +1064,6 @@ snapshots:
   giturl@1.0.0: {}
 
   has-yarn@1.0.0: {}
-
-  is-object@1.0.1: {}
 
   isexe@2.0.0: {}
 
@@ -1162,11 +1133,7 @@ snapshots:
       '@babel/types': 7.29.11
       source-map-js: 1.2.2
 
-  merge-descriptors@1.0.1: {}
-
   minimist@1.2.0: {}
-
-  module-not-found-error@1.0.1: {}
 
   nanoid@3.3.20: {}
 
@@ -1206,15 +1173,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  proxyquire@2.0.0:
-    dependencies:
-      fill-keys: 1.0.2
-      module-not-found-error: 1.0.1
-      resolve: 1.1.7
-
   pseudomap@1.0.2: {}
-
-  resolve@1.1.7: {}
 
   rolldown@1.2.16:
     dependencies:

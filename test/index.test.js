@@ -4,16 +4,14 @@
 
 import { beforeEach, describe, it, vi } from "vitest";
 
-var upath = require("upath");
-var assert = require("assert");
-var hasYarn = require("has-yarn");
-var spawn = require("cross-spawn");
-var proxyquire = require("proxyquire");
+import assert from "assert";
+import hasYarn from "has-yarn";
+import spawn from "cross-spawn";
+import gitRemote from "../util/git-remote";
 
-var gitRemote = vi.fn();
+vi.mock("../util/git-remote", () => ({ default: vi.fn() }));
 
-/** @type {import("../index")} */
-var versionChangelog = proxyquire("../index", { "./util/git-remote": gitRemote });
+import versionChangelog from "../index";
 
 /**
  * Pads a number with a leading zero if it is less than 10
@@ -44,8 +42,8 @@ if (!versionPrefix) {
 
 describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () {
   beforeEach(() => {
-    gitRemote.mockClear();
-    gitRemote.mockReturnValue("git@github.com:nstringham/update-changelog-version.git");
+    vi.mocked(gitRemote).mockClear();
+    vi.mocked(gitRemote).mockReturnValue("git@github.com:nstringham/update-changelog-version.git");
   });
 
   it.skip("Handles a non-git repo correctly", function () {
@@ -136,7 +134,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
   describe("gitlab", function () {
     it("Correctly adds a new gitlab version", function () {
       return new Promise((resolve, reject) => {
-        gitRemote.mockReturnValue("git@gitlab.com:nstringham/update-changelog-version.git");
+        vi.mocked(gitRemote).mockReturnValue("git@gitlab.com:nstringham/update-changelog-version.git");
         versionChangelog(
           `
 # Changelog
@@ -222,7 +220,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () 
   describe("bitbucket", function () {
     it("Correctly adds a new bitbucket version", function () {
       return new Promise((resolve, reject) => {
-        gitRemote.mockReturnValue("git@bitbucket.org:nstringham/update-changelog-version.git");
+        vi.mocked(gitRemote).mockReturnValue("git@bitbucket.org:nstringham/update-changelog-version.git");
         versionChangelog(
           `
 # Changelog

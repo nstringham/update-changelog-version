@@ -2,14 +2,13 @@
 
 // @ts-check
 
-var fs = require("fs");
-var spawn = require("cross-spawn");
-var githubUrlFromGit = require("github-url-from-git");
-var bitbucketUrlFromGit = require("bitbucket-url-from-git");
-var gitlabUrlFromGit = require("giturl").parse;
-var hasYarn = require("has-yarn");
-var hasPnpm = require("./util/has-pnpm.js");
-var gitRemote = require("./util/git-remote");
+import spawn from "cross-spawn";
+import githubUrlFromGit from "github-url-from-git";
+import bitbucketUrlFromGit from "bitbucket-url-from-git";
+import { parse as gitlabUrlFromGit } from "giturl";
+import hasYarn from "has-yarn";
+import hasPnpm from "./util/has-pnpm.js";
+import gitRemote from "./util/git-remote";
 
 /**
  * Pads the start of a number with a leading zero to make it two digits.
@@ -209,7 +208,7 @@ function updateCompareUri(data, versionString, remote) {
  * @param {{version: string, remote: Remote}} version The version and remote repository type
  * @param {(error: Error|null, data?: string) => void} done The callback function
  */
-module.exports = function versionChangelog(data, { version, remote }, done) {
+export default function versionChangelog(data, { version, remote }, done) {
   try {
     // Add the heading for the new version number
     data = insertHeading(data, version);
@@ -222,6 +221,4 @@ module.exports = function versionChangelog(data, { version, remote }, done) {
   } catch (error) {
     done(/** @type {Error} */ (error));
   }
-};
-
-module.exports.getVersionPrefix = getVersionPrefix;
+}
