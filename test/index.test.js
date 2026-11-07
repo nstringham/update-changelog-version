@@ -5,7 +5,7 @@ import { beforeEach, describe, it, vi } from "vitest";
 import assert from "assert";
 import gitRemote from "../util/git-remote";
 
-vi.mock("../util/git-remote", () => ({ default: vi.fn() }));
+vi.mock(import("../util/git-remote"), () => ({ default: vi.fn() }));
 
 import versionChangelog from "../index";
 

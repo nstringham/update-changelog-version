@@ -4,7 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import { detectPackageManager } from "../util/detect-package-manager";
 import { readFileSync, existsSync } from "node:fs";
 
-vi.mock("node:fs", () => ({
+vi.mock(import("node:fs"), () => ({
   readFileSync: vi.fn(),
   existsSync: vi.fn(),
 }));
