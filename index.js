@@ -216,9 +216,8 @@ export default function versionChangelog(data, { version, remote }, done) {
     // Update the [Unreleased] URI
     // and add the new version URI
     data = updateCompareUri(data, version, remote ? remote : "github");
-
-    done(null, data);
   } catch (error) {
     done(/** @type {Error} */ (error));
   }
+  done(null, data);
 }
