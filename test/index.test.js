@@ -3,14 +3,11 @@
 import { beforeEach, describe, it, vi } from "vitest";
 
 import assert from "assert";
-import hasYarn from "has-yarn";
-import { runCommand } from "../util/run-command";
 import gitRemote from "../util/git-remote";
 
 vi.mock("../util/git-remote", () => ({ default: vi.fn() }));
 
 import versionChangelog from "../index";
-import hasPnpm from "../util/has-pnpm";
 
 /**
  * Pads a number with a leading zero if it is less than 10
@@ -25,24 +22,9 @@ const date = new Date();
 const todayDate = date.getFullYear() + "-" + padWithZero(date.getMonth() + 1) + "-" + padWithZero(date.getDate());
 const repoBase = "https://github.com/nstringham/";
 
-let versionPrefix = "";
-let prefixSource = "";
-if (hasPnpm()) {
-  versionPrefix = runCommand("pnpm config get version-tag-prefix").trim();
-  prefixSource = "pnpm config get version-tag-prefix";
-} else if (hasYarn()) {
-  versionPrefix = runCommand("yarn config get version-tag-prefix").trim();
-  prefixSource = "yarn config get version-tag-prefix";
-} else {
-  versionPrefix = runCommand("npm config get tag-version-prefix").trim();
-  prefixSource = "npm config get tag-version-prefix";
-}
-if (!versionPrefix || versionPrefix === String(undefined)) {
-  versionPrefix = "v";
-  prefixSource = "default";
-}
+const versionPrefix = "v";
 
-describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function () {
+describe("Versioning Changelog", function () {
   beforeEach(() => {
     vi.mocked(gitRemote).mockClear();
     vi.mocked(gitRemote).mockReturnValue("git@github.com:nstringham/update-changelog-version.git");
