@@ -1,13 +1,13 @@
 // @ts-check
 
-import spawn from "cross-spawn";
+import { runCommand } from "./run-command.js";
 
 /**
  * Gets the URL of the git remote origin
  * @returns {string} The URL of the git remote origin
  */
 export default function gitRemote() {
-  var remoteUrl = spawn.sync("git", ["config", "--get", "remote.origin.url"]).stdout.toString().trim();
+  var remoteUrl = runCommand("git config --get remote.origin.url").trim();
 
   if (!remoteUrl) {
     throw new Error(

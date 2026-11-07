@@ -4,12 +4,13 @@ import { beforeEach, describe, it, vi } from "vitest";
 
 import assert from "assert";
 import hasYarn from "has-yarn";
-import spawn from "cross-spawn";
+import { runCommand } from "../util/run-command";
 import gitRemote from "../util/git-remote";
 
 vi.mock("../util/git-remote", () => ({ default: vi.fn() }));
 
 import versionChangelog from "../index";
+import hasPnpm from "../util/has-pnpm";
 
 /**
  * Pads a number with a leading zero if it is less than 10
@@ -26,14 +27,17 @@ const repoBase = "https://github.com/nstringham/";
 
 let versionPrefix = "";
 let prefixSource = "";
-if (hasYarn()) {
-  versionPrefix = spawn.sync("yarn", ["config", "get", "version-tag-prefix"]).stdout.toString().trim();
+if (hasPnpm()) {
+  versionPrefix = runCommand("pnpm config get version-tag-prefix").trim();
+  prefixSource = "pnpm config get version-tag-prefix";
+} else if (hasYarn()) {
+  versionPrefix = runCommand("yarn config get version-tag-prefix").trim();
   prefixSource = "yarn config get version-tag-prefix";
 } else {
-  versionPrefix = spawn.sync("npm", ["config", "get", "tag-version-prefix"]).stdout.toString().trim();
+  versionPrefix = runCommand("npm config get tag-version-prefix").trim();
   prefixSource = "npm config get tag-version-prefix";
 }
-if (!versionPrefix) {
+if (!versionPrefix || versionPrefix === String(undefined)) {
   versionPrefix = "v";
   prefixSource = "default";
 }
