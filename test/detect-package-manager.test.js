@@ -48,6 +48,18 @@ describe("detectPackageManager", () => {
     expect(detectPackageManager("cwd")).toBe("pnpm");
   });
 
+  it("ignores unknown package managers", () => {
+    vi.mocked(existsSync).mockImplementation((path) => path == "cwd/package.json");
+
+    vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ packageManager: "unknown@1.0.0" }));
+
+    expect(detectPackageManager("cwd")).toBe("npm");
+
+    vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ devEngines: { packageManager: { name: "unknown" } } }));
+
+    expect(detectPackageManager("cwd")).toBe("npm");
+  });
+
   it("implies pnpm from pnpm lock file", () => {
     vi.mocked(existsSync).mockImplementation((path) => path == "cwd/pnpm-lock.yaml");
 
