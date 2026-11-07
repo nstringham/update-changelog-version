@@ -14,7 +14,7 @@ import versionChangelog from "../index";
 /**
  * Pads a number with a leading zero if it is less than 10
  * @param {number} num
- * @returns {string}
+ * @returns {number | string}
  */
 function padWithZero(num) {
   return num < 10 ? "0" + num : num;

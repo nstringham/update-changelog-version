@@ -205,7 +205,7 @@ function updateCompareUri(data, versionString, remote) {
 /**
  * Update the changelog with the new version and remote repository URLs
  * @param {string} data the changelog markdown
- * @param {{version: string, remote: Remote}} version The version and remote repository type
+ * @param {{version: string, remote?: Remote}} version The version and remote repository type
  * @param {(error: Error|null, data?: string) => void} done The callback function
  */
 export default function versionChangelog(data, { version, remote }, done) {
