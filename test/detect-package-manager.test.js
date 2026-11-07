@@ -9,6 +9,14 @@ vi.mock(import("node:fs"), () => ({
   existsSync: vi.fn(),
 }));
 
+vi.mock(import("node:path"), async (importOriginal) => {
+  const originalModule = await importOriginal();
+  return {
+    ...originalModule,
+    join: originalModule.posix.join,
+  };
+});
+
 describe("detectPackageManager", () => {
   it("defaults to npm", () => {
     vi.mocked(existsSync).mockReturnValue(false);
