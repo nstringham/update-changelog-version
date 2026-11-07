@@ -216,9 +216,6 @@ importers:
       giturl:
         specifier: ^1.0.0
         version: 1.0.0
-      has-yarn:
-        specifier: ^1.0.0
-        version: 1.0.0
       minimist:
         specifier: ^1.2.0
         version: 1.2.0
@@ -581,10 +578,6 @@ packages:
   giturl@1.0.0:
     resolution: {integrity: sha512-xwXgqGaS7vF+1Eoy7r4HIk8B4LOfFluikltEpQfhHsYsUV8BuQ3u7NN3di/bIx/BGyGZWo+o9JSXI51cFDzYIg==}
     engines: {node: '>= 0.10.0'}
-
-  has-yarn@1.0.0:
-    resolution: {integrity: sha512-UAI4b48aqrdez88CwMfC9s+gcJ25O1qg0/hS5eKOsIF5tOw2EYcgGsryYF6TEI5G8SeCYzFBt5Z04D/BDABYSQ==}
-    engines: {node: '>=4'}
 
   js-tokens@10.0.0:
     resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
@@ -1035,8 +1028,6 @@ snapshots:
   github-url-from-git@1.5.0: {}
 
   giturl@1.0.0: {}
-
-  has-yarn@1.0.0: {}
 
   js-tokens@10.0.0: {}
 

@@ -5,10 +5,9 @@
 import githubUrlFromGit from "github-url-from-git";
 import bitbucketUrlFromGit from "bitbucket-url-from-git";
 import { parse as gitlabUrlFromGit } from "giturl";
-import hasYarn from "has-yarn";
-import hasPnpm from "./util/has-pnpm.js";
 import gitRemote from "./util/git-remote";
 import { runCommand } from "./util/run-command.js";
+import { detectPackageManager } from "./util/detect-package-manager.js";
 
 /**
  * Pads the start of a number with a leading zero to make it two digits.
@@ -46,10 +45,11 @@ function insertHeading(data, versionString) {
  * @returns {string} The version tag prefix (defaults to "v")
  */
 function getVersionPrefix() {
+  const packageManager = detectPackageManager(process.cwd());
   var versionPrefix = "";
-  if (hasPnpm()) {
+  if (packageManager === "pnpm") {
     versionPrefix = runCommand("pnpm config get version-tag-prefix").trim();
-  } else if (hasYarn()) {
+  } else if (packageManager === "yarn") {
     versionPrefix = runCommand("yarn config get version-tag-prefix").trim();
   } else {
     versionPrefix = runCommand("npm config get tag-version-prefix").trim();
