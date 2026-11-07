@@ -1,5 +1,3 @@
-"use strict";
-
 // @ts-check
 
 import { beforeEach, describe, it, vi } from "vitest";
