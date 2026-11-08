@@ -28,13 +28,12 @@ var version = packageJson.version;
 
 var data = fs.readFileSync(fileName, "utf8");
 
-versionChangelog(data, { version: version, remote: remote }, function (error, data) {
-  if (error) {
+versionChangelog(data, { version: version, remote: remote })
+  .catch((error) => {
     console.error(error.message || error.toString());
     process.exit(1);
-  }
-
-  fs.writeFileSync(fileName, /** @type {string} */ (data), "utf8");
-
-  process.exit(0);
-});
+  })
+  .then((data) => {
+    fs.writeFileSync(fileName, data, "utf8");
+    process.exit(0);
+  });

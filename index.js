@@ -162,18 +162,15 @@ function updateCompareUri(data, versionString, remote) {
  * Update the changelog with the new version and remote repository URLs
  * @param {string} data the changelog markdown
  * @param {{version: string, remote?: Remote}} version The version and remote repository type
- * @param {(error: Error|null, data?: string) => void} done The callback function
+ * @return {Promise<string>} the modified changelog markdown
  */
-export default function versionChangelog(data, { version, remote }, done) {
-  try {
-    // Add the heading for the new version number
-    data = insertHeading(data, version);
+export default async function versionChangelog(data, { version, remote }) {
+  // Add the heading for the new version number
+  data = insertHeading(data, version);
 
-    // Update the [Unreleased] URI
-    // and add the new version URI
-    data = updateCompareUri(data, version, remote ? remote : "github");
-  } catch (error) {
-    done(/** @type {Error} */ (error));
-  }
-  done(null, data);
+  // Update the [Unreleased] URI
+  // and add the new version URI
+  data = updateCompareUri(data, version, remote ? remote : "github");
+
+  return data;
 }
