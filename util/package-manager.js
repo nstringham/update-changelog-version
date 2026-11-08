@@ -2,6 +2,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { runCommand } from "./run-command";
 
 const PACKAGE_MANAGERS = /** @type {const} */ (["npm", "yarn", "pnpm"]);
 
@@ -71,4 +72,24 @@ function getPackageManagerFromPackageJson(packageJson) {
     }
   }
   return null;
+}
+
+/** @type {{ readonly [key in PackageManager]: string }} */
+const VERSION_PREFIX_COMMANDS = {
+  npm: "npm config get tag-version-prefix",
+  yarn: "yarn config get version-tag-prefix",
+  pnpm: "pnpm config get tag-version-prefix",
+};
+
+/**
+ * Gets the version prefix configured for a given package manger
+ * @param {PackageManager} packageManager
+ * @returns {string} The version prefix or null if not found
+ */
+export function getVersionPrefix(packageManager) {
+  const output = runCommand(VERSION_PREFIX_COMMANDS[packageManager]).trim();
+  if (output == "" || output == String(undefined)) {
+    return "v";
+  }
+  return output;
 }

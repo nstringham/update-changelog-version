@@ -1,8 +1,9 @@
 // @ts-check
 
-import { describe, it, expect, vi } from "vitest";
-import { detectPackageManager } from "../util/package-manager";
+import { describe, it, beforeEach, expect, vi } from "vitest";
+import { detectPackageManager, getVersionPrefix } from "../util/package-manager.js";
 import { readFileSync, existsSync } from "node:fs";
+import { runCommand } from "../util/run-command.js";
 
 vi.mock(import("node:fs"), () => ({
   readFileSync: vi.fn(),
@@ -17,7 +18,16 @@ vi.mock(import("node:path"), async (importOriginal) => {
   };
 });
 
+vi.mock(import("../util/run-command.js"), () => ({
+  runCommand: vi.fn(),
+}));
+
 describe("detectPackageManager", () => {
+  beforeEach(() => {
+    vi.mocked(existsSync).mockReset();
+    vi.mocked(readFileSync).mockReset();
+  });
+
   it("defaults to npm", () => {
     vi.mocked(existsSync).mockReturnValue(false);
 
@@ -88,5 +98,43 @@ describe("detectPackageManager", () => {
 
     expect(detectPackageManager("cwd")).toBe("yarn");
     expect(vi.mocked(existsSync)).toHaveBeenCalledWith("cwd/yarn.lock");
+  });
+});
+
+describe("getVersionPrefix", () => {
+  beforeEach(() => {
+    vi.mocked(runCommand).mockReset();
+  });
+
+  it("passes through the output of npm config get tag-version-prefix", () => {
+    vi.mocked(runCommand).mockReturnValue("version-");
+    expect(getVersionPrefix("npm")).toBe("version-");
+    expect(vi.mocked(runCommand)).toHaveBeenCalledExactlyOnceWith("npm config get tag-version-prefix");
+  });
+
+  it("passes through the output of yarn config get version-tag-prefix", () => {
+    vi.mocked(runCommand).mockReturnValue("version-");
+    expect(getVersionPrefix("yarn")).toBe("version-");
+    expect(vi.mocked(runCommand)).toHaveBeenCalledExactlyOnceWith("yarn config get version-tag-prefix");
+  });
+
+  it("passes through the output of pnpm config get tag-version-prefix", () => {
+    vi.mocked(runCommand).mockReturnValue("version-");
+    expect(getVersionPrefix("pnpm")).toBe("version-");
+    expect(vi.mocked(runCommand)).toHaveBeenCalledExactlyOnceWith("pnpm config get tag-version-prefix");
+  });
+
+  it("returns v if the command output is empty", () => {
+    vi.mocked(runCommand).mockReturnValue("");
+    expect(getVersionPrefix("npm")).toBe("v");
+    expect(getVersionPrefix("yarn")).toBe("v");
+    expect(getVersionPrefix("pnpm")).toBe("v");
+  });
+
+  it("returns v if the command output is undefined", () => {
+    vi.mocked(runCommand).mockReturnValue("undefined");
+    expect(getVersionPrefix("npm")).toBe("v");
+    expect(getVersionPrefix("yarn")).toBe("v");
+    expect(getVersionPrefix("pnpm")).toBe("v");
   });
 });

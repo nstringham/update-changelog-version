@@ -6,8 +6,7 @@ import githubUrlFromGit from "github-url-from-git";
 import bitbucketUrlFromGit from "bitbucket-url-from-git";
 import { parse as gitlabUrlFromGit } from "giturl";
 import gitRemote from "./util/git-remote";
-import { runCommand } from "./util/run-command.js";
-import { detectPackageManager } from "./util/package-manager.js";
+import { detectPackageManager, getVersionPrefix } from "./util/package-manager.js";
 import { formatDate } from "./util/format-date.js";
 
 /**
@@ -20,39 +19,19 @@ function insertHeading(data, versionString) {
   return data.replace(/(## \[Unreleased\].*)/g, "$1\n\n## [" + versionString + "][] - " + formatDate(new Date()));
 }
 
-/**
- * gets the version tag prefix from the package manager configuration
- * @returns {string} The version tag prefix (defaults to "v")
- */
-function getVersionPrefix() {
-  const packageManager = detectPackageManager(process.cwd());
-  var versionPrefix = "";
-  if (packageManager === "pnpm") {
-    versionPrefix = runCommand("pnpm config get tag-version-prefix").trim();
-  } else if (packageManager === "yarn") {
-    versionPrefix = runCommand("yarn config get version-tag-prefix").trim();
-  } else {
-    versionPrefix = runCommand("npm config get tag-version-prefix").trim();
-  }
-  if (versionPrefix === String(undefined)) {
-    versionPrefix = "";
-  }
-  return versionPrefix || "v";
-}
-
 /** @typedef {{unreleased: string, previous: string}} UriResult */
 
 /**
  * Gets the GitHub URLs for the unreleased and previous versions.
  * @param {string} data The changelog markdown
  * @param {string} newVersion The new version
+ * @param {string} prefix The version prefix
  * @returns {UriResult} The GitHub URLs for the unreleased and previous versions
  */
-function githubUris(data, newVersion) {
+function githubUris(data, newVersion, prefix) {
   var remoteUrl;
   var previousVersion;
   var previousLink;
-  var prefix = getVersionPrefix();
 
   // Try get previous version and remote from unreleased tag if it exists
   var match = /\[Unreleased\]: (.*)\/compare\/(.*)\.\.\.HEAD/g.exec(data);
@@ -82,13 +61,13 @@ function githubUris(data, newVersion) {
  * Gets the Bitbucket URLs for the unreleased and previous versions.
  * @param {string} data The changelog markdown
  * @param {string} newVersion The new version
+ * @param {string} prefix The version prefix
  * @returns {UriResult} The Bitbucket URLs for the unreleased and previous versions
  */
-function bitbucketUris(data, newVersion) {
+function bitbucketUris(data, newVersion, prefix) {
   var remoteUrl;
   var previousVersion;
   var previousLink;
-  var prefix = getVersionPrefix();
 
   // Try get previous version and remote from unreleased tag if it exists
   var match = /\[Unreleased\]: (.*)\/branches\/compare\/master%0D(.*)/g.exec(data);
@@ -119,13 +98,13 @@ function bitbucketUris(data, newVersion) {
  * Gets the GitLab URLs for the unreleased and previous versions.
  * @param {string} data The changelog markdown
  * @param {string} newVersion The new version
+ * @param {string} prefix The version prefix
  * @returns {UriResult} The GitLab URLs for the unreleased and previous versions
  */
-function gitlabUris(data, newVersion) {
+function gitlabUris(data, newVersion, prefix) {
   var remoteUrl;
   var previousVersion;
   var previousLink;
-  var prefix = getVersionPrefix();
 
   // Try get previous version and remote from unreleased tag if it exists
   var match = /\[Unreleased\]: (.*)\/compare\/master...(.*)/g.exec(data);
@@ -168,8 +147,9 @@ const UriFunctions = {
  * @returns {string} The updated changelog markdown
  */
 function updateCompareUri(data, versionString, remote) {
-  var remoteUrl;
-  var uris = UriFunctions[remote](data, versionString);
+  const packageManager = detectPackageManager(process.cwd());
+  const prefix = getVersionPrefix(packageManager);
+  const uris = UriFunctions[remote](data, versionString, prefix);
 
   if (data.match(/\[Unreleased\]:/)) {
     return data.replace(/\[Unreleased\]:.*/, uris.unreleased + "\n" + uris.previous);
