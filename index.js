@@ -115,7 +115,6 @@ function gitlabUris(data, newVersion, prefix) {
   }
 
   if (!remoteUrl) {
-    var remote = gitRemote();
     remoteUrl = gitlabUrlFromGit(gitRemote());
   }
 

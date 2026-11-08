@@ -11,7 +11,6 @@ vi.mock(import("../util/git-remote"), () => ({ default: vi.fn() }));
 import versionChangelog from "../index";
 
 const todayDate = formatDate(new Date());
-const repoBase = "https://github.com/nstringham/";
 
 const versionPrefix = "v";
 
