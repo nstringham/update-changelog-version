@@ -28,7 +28,7 @@ function getVersionPrefix() {
   const packageManager = detectPackageManager(process.cwd());
   var versionPrefix = "";
   if (packageManager === "pnpm") {
-    versionPrefix = runCommand("pnpm config get version-tag-prefix").trim();
+    versionPrefix = runCommand("pnpm config get tag-version-prefix").trim();
   } else if (packageManager === "yarn") {
     versionPrefix = runCommand("yarn config get version-tag-prefix").trim();
   } else {
