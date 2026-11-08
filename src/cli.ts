@@ -12,7 +12,7 @@ const argv = minimist(process.argv.slice(2));
 const validRemotes = ["bitbucket", "github", "gitlab"];
 
 let fileName = argv._[0] || "CHANGELOG.md";
-const remote = validRemotes.indexOf(argv.remote) !== -1 ? argv.remote : "github";
+const remote = validRemotes.includes(argv.remote) ? argv.remote : "github";
 
 if (!upath.isAbsolute(fileName)) {
   fileName = upath.normalize(upath.join(process.cwd(), fileName));
