@@ -1,6 +1,6 @@
 // @ts-check
 
-import { existsSync, readFileSync } from "node:fs";
+import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { runCommand } from "./run-command";
 
@@ -18,23 +18,35 @@ export function isPackageManager(packageManager) {
 }
 
 /**
+ * Checks if a file exists
+ * @param {string} path - The path to the file
+ * @returns {Promise<boolean>} True if the file exists, false otherwise
+ */
+async function exists(path) {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Detects which package manager is being used
  * @param {string} cwd - The directory to check for the package manager
- * @returns {PackageManager}
+ * @returns {Promise<PackageManager>}
  */
-export function detectPackageManager(cwd) {
-  const packagePath = join(cwd, "package.json");
-  if (existsSync(packagePath)) {
-    const packageJson = JSON.parse(readFileSync(packagePath, "utf-8"));
-    const packageManager = getPackageManagerFromPackageJson(packageJson);
-    if (packageManager != null) {
-      return packageManager;
-    }
+export async function detectPackageManager(cwd) {
+  const packageJson = JSON.parse(await readFile(join(cwd, "package.json"), "utf-8"));
+  const packageManager = getPackageManagerFromPackageJson(packageJson);
+  if (packageManager != null) {
+    return packageManager;
   }
-  if (existsSync(join(cwd, "pnpm-lock.yaml"))) {
+
+  if (await exists(join(cwd, "pnpm-lock.yaml"))) {
     return "pnpm";
   }
-  if (existsSync(join(cwd, "yarn.lock"))) {
+  if (await exists(join(cwd, "yarn.lock"))) {
     return "yarn";
   }
   return "npm";

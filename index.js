@@ -144,10 +144,10 @@ const UriFunctions = {
  * @param {string} data The changelog markdown
  * @param {string} versionString The new version
  * @param {Remote} remote The remote repository type
- * @returns {string} The updated changelog markdown
+ * @returns {Promise<string>} The updated changelog markdown
  */
-function updateCompareUri(data, versionString, remote) {
-  const packageManager = detectPackageManager(process.cwd());
+async function updateCompareUri(data, versionString, remote) {
+  const packageManager = await detectPackageManager(process.cwd());
   const prefix = getVersionPrefix(packageManager);
   const uris = UriFunctions[remote](data, versionString, prefix);
 
@@ -170,7 +170,7 @@ export default async function versionChangelog(data, { version, remote }) {
 
   // Update the [Unreleased] URI
   // and add the new version URI
-  data = updateCompareUri(data, version, remote ? remote : "github");
+  data = await updateCompareUri(data, version, remote ? remote : "github");
 
   return data;
 }
