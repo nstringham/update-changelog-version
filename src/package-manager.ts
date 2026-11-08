@@ -84,7 +84,7 @@ const VERSION_PREFIX_COMMANDS = {
 /** Gets the version prefix configured for a given package manger */
 export function getVersionPrefix(packageManager: PackageManager): string {
   const output = runCommand(VERSION_PREFIX_COMMANDS[packageManager]).trim();
-  if (output == "" || output == String(undefined)) {
+  if (output === "" || output === String(undefined)) {
     return "v";
   }
   return output;
