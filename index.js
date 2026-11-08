@@ -8,15 +8,7 @@ import { parse as gitlabUrlFromGit } from "giturl";
 import gitRemote from "./util/git-remote";
 import { runCommand } from "./util/run-command.js";
 import { detectPackageManager } from "./util/detect-package-manager.js";
-
-/**
- * Pads the start of a number with a leading zero to make it two digits.
- * @argument {number} date
- * @returns {string}
- */
-function dateWithLeadingZero(date) {
-  return ("0" + date).slice(-2);
-}
+import { formatDate } from "./util/format-date.js";
 
 /**
  * Replaces the "Unreleased" heading with a new version heading including the date.
@@ -25,19 +17,7 @@ function dateWithLeadingZero(date) {
  * @returns {string} The updated changelog markdown
  */
 function insertHeading(data, versionString) {
-  var date = new Date();
-
-  return data.replace(
-    /(## \[Unreleased\].*)/g,
-    "$1\n\n## [" +
-      versionString +
-      "][] - " +
-      date.getFullYear() +
-      "-" +
-      dateWithLeadingZero(date.getMonth() + 1) +
-      "-" +
-      dateWithLeadingZero(date.getDate()),
-  );
+  return data.replace(/(## \[Unreleased\].*)/g, "$1\n\n## [" + versionString + "][] - " + formatDate(new Date()));
 }
 
 /**

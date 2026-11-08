@@ -3,23 +3,14 @@
 import { beforeEach, describe, it, vi } from "vitest";
 
 import assert from "assert";
+import { formatDate } from "../util/format-date";
 import gitRemote from "../util/git-remote";
 
 vi.mock(import("../util/git-remote"), () => ({ default: vi.fn() }));
 
 import versionChangelog from "../index";
 
-/**
- * Pads a number with a leading zero if it is less than 10
- * @param {number} num
- * @returns {number | string}
- */
-function padWithZero(num) {
-  return num < 10 ? "0" + num : num;
-}
-
-const date = new Date();
-const todayDate = date.getFullYear() + "-" + padWithZero(date.getMonth() + 1) + "-" + padWithZero(date.getDate());
+const todayDate = formatDate(new Date());
 const repoBase = "https://github.com/nstringham/";
 
 const versionPrefix = "v";
