@@ -7,7 +7,7 @@ import bitbucketUrlFromGit from "bitbucket-url-from-git";
 import { parse as gitlabUrlFromGit } from "giturl";
 import gitRemote from "./util/git-remote";
 import { runCommand } from "./util/run-command.js";
-import { detectPackageManager } from "./util/detect-package-manager.js";
+import { detectPackageManager } from "./util/package-manager.js";
 import { formatDate } from "./util/format-date.js";
 
 /**

@@ -1,7 +1,7 @@
 // @ts-check
 
 import { describe, it, expect, vi } from "vitest";
-import { detectPackageManager } from "../util/detect-package-manager";
+import { detectPackageManager } from "../util/package-manager";
 import { readFileSync, existsSync } from "node:fs";
 
 vi.mock(import("node:fs"), () => ({
@@ -27,6 +27,8 @@ describe("detectPackageManager", () => {
   it("uses packageManager from package file", () => {
     vi.mocked(existsSync).mockImplementation((path) => path == "cwd/package.json");
 
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ packageManager: "yarn@1.22.0" }));
 
     expect(detectPackageManager("cwd")).toBe("yarn");
@@ -34,10 +36,14 @@ describe("detectPackageManager", () => {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ packageManager: "pnpm@11.25.0" }));
 
     expect(detectPackageManager("cwd")).toBe("pnpm");
+
+    expect(warn).not.toHaveBeenCalled();
   });
 
   it("uses devEngines from package file", () => {
     vi.mocked(existsSync).mockImplementation((path) => path == "cwd/package.json");
+
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ devEngines: { packageManager: { name: "yarn" } } }));
 
@@ -46,18 +52,28 @@ describe("detectPackageManager", () => {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ devEngines: { packageManager: { name: "pnpm" } } }));
 
     expect(detectPackageManager("cwd")).toBe("pnpm");
+
+    expect(warn).not.toHaveBeenCalled();
   });
 
   it("ignores unknown package managers", () => {
     vi.mocked(existsSync).mockImplementation((path) => path == "cwd/package.json");
 
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ packageManager: "unknown@1.0.0" }));
 
     expect(detectPackageManager("cwd")).toBe("npm");
 
+    expect(warn).toHaveBeenCalledExactlyOnceWith("Unknown package manager: unknown");
+
+    warn.mockClear();
+
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ devEngines: { packageManager: { name: "unknown" } } }));
 
     expect(detectPackageManager("cwd")).toBe("npm");
+
+    expect(warn).toHaveBeenCalledExactlyOnceWith("Unknown package manager: unknown");
   });
 
   it("implies pnpm from pnpm lock file", () => {
