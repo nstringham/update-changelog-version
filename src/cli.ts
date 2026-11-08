@@ -24,14 +24,8 @@ if (!upath.isAbsolute(fileName)) {
 // it will be the _new_ version
 var version = packageJson.version;
 
-var data = fs.readFileSync(fileName, "utf8");
+const changelog = fs.readFileSync(fileName, "utf8");
 
-versionChangelog(data, { version: version, remote: remote })
-  .catch((error) => {
-    console.error(error.message || error.toString());
-    process.exit(1);
-  })
-  .then((data) => {
-    fs.writeFileSync(fileName, data, "utf8");
-    process.exit(0);
-  });
+const updatedChangelog = await versionChangelog(changelog, { version: version, remote: remote });
+
+fs.writeFileSync(fileName, updatedChangelog, "utf8");
