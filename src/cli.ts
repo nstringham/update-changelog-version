@@ -7,12 +7,12 @@ import minimist from "minimist";
 
 const packageJson = require(upath.join(process.cwd(), "package.json"));
 
-var argv = minimist(process.argv.slice(2));
+const argv = minimist(process.argv.slice(2));
 
-var validRemotes = ["bitbucket", "github", "gitlab"];
+const validRemotes = ["bitbucket", "github", "gitlab"];
 
-var fileName = argv._[0] || "CHANGELOG.md";
-var remote = validRemotes.indexOf(argv.remote) !== -1 ? argv.remote : "github";
+let fileName = argv._[0] || "CHANGELOG.md";
+const remote = validRemotes.indexOf(argv.remote) !== -1 ? argv.remote : "github";
 
 if (!upath.isAbsolute(fileName)) {
   fileName = upath.normalize(upath.join(process.cwd(), fileName));
@@ -22,7 +22,7 @@ if (!upath.isAbsolute(fileName)) {
 // When run as part of the `"version"` script
 // (for example by `npm release`)
 // it will be the _new_ version
-var version = packageJson.version;
+const version = packageJson.version;
 
 const changelog = fs.readFileSync(fileName, "utf8");
 

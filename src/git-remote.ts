@@ -5,7 +5,7 @@ import { runCommand } from "./run-command.js";
  * @returns The URL of the git remote origin
  */
 export default function gitRemote(): string {
-  var remoteUrl = runCommand("git config --get remote.origin.url").trim();
+  const remoteUrl = runCommand("git config --get remote.origin.url").trim();
 
   if (!remoteUrl) {
     throw new Error(

@@ -32,12 +32,12 @@ type UriResult = {
  * @returns The GitHub URLs for the unreleased and previous versions
  */
 function githubUris(data: string, newVersion: string, prefix: string): UriResult {
-  var remoteUrl;
-  var previousVersion;
-  var previousLink;
+  let remoteUrl: string | undefined;
+  let previousVersion: string | undefined;
+  let previousLink: string;
 
   // Try get previous version and remote from unreleased tag if it exists
-  var match = /\[Unreleased\]: (.*)\/compare\/(.*)\.\.\.HEAD/g.exec(data);
+  const match = /\[Unreleased\]: (.*)\/compare\/(.*)\.\.\.HEAD/g.exec(data);
 
   if (match) {
     remoteUrl = match[1];
@@ -68,12 +68,12 @@ function githubUris(data: string, newVersion: string, prefix: string): UriResult
  * @returns The Bitbucket URLs for the unreleased and previous versions
  */
 function bitbucketUris(data: string, newVersion: string, prefix: string): UriResult {
-  var remoteUrl;
-  var previousVersion;
-  var previousLink;
+  let remoteUrl: string | undefined;
+  let previousVersion: string | undefined;
+  let previousLink: string;
 
   // Try get previous version and remote from unreleased tag if it exists
-  var match = /\[Unreleased\]: (.*)\/branches\/compare\/master%0D(.*)/g.exec(data);
+  const match = /\[Unreleased\]: (.*)\/branches\/compare\/master%0D(.*)/g.exec(data);
 
   if (match) {
     remoteUrl = match[1];
@@ -105,12 +105,12 @@ function bitbucketUris(data: string, newVersion: string, prefix: string): UriRes
  * @returns The GitLab URLs for the unreleased and previous versions
  */
 function gitlabUris(data: string, newVersion: string, prefix: string): UriResult {
-  var remoteUrl;
-  var previousVersion;
-  var previousLink;
+  let remoteUrl: string | undefined;
+  let previousVersion: string | undefined;
+  let previousLink: string;
 
   // Try get previous version and remote from unreleased tag if it exists
-  var match = /\[Unreleased\]: (.*)\/compare\/master...(.*)/g.exec(data);
+  const match = /\[Unreleased\]: (.*)\/compare\/master...(.*)/g.exec(data);
 
   if (match) {
     remoteUrl = match[1];

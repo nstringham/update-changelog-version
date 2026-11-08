@@ -11,5 +11,6 @@ export default defineConfig({
   rules: {
     curly: "warn",
     eqeqeq: ["warn", "smart"],
+    "no-var": "warn",
   },
 });
