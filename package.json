@@ -25,6 +25,8 @@
     "build": "tsc",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
+    "lint": "oxlint --deny-warnings",
+    "lint:fix": "oxlint --fix",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "version": "./lib/cli.js CHANGELOG.md && git add CHANGELOG.md",
@@ -43,6 +45,8 @@
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^5.0.5",
     "oxfmt": "^0.75.0",
+    "oxlint": "^1.92.0",
+    "oxlint-tsgolint": "^7.0.2006",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5"
   },
