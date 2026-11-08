@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatDate } from "../util/format-date.js";
+import { formatDate } from "./format-date.js";
 
 describe("formatDate", () => {
   it("formats a date object into YYYY-MM-DD", () => {

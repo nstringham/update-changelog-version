@@ -1,9 +1,9 @@
 /**
  * Formats a date object into a string in the format YYYY-MM-DD
- * @param {Date} date - The date object to format
- * @returns {string} The formatted date string in the format YYYY-MM-DD
+ * @param date - The date object to format
+ * @returns The formatted date string in the format YYYY-MM-DD
  */
-export function formatDate(date) {
+export function formatDate(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");

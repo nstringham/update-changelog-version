@@ -1,14 +1,12 @@
-// @ts-check
-
 import { beforeEach, describe, it, vi } from "vitest";
 
 import assert from "assert";
-import { formatDate } from "../util/format-date";
-import gitRemote from "../util/git-remote";
+import { formatDate } from "./format-date.js";
+import gitRemote from "./git-remote.js";
 
-vi.mock(import("../util/git-remote"), () => ({ default: vi.fn() }));
+vi.mock(import("./git-remote.js"), () => ({ default: vi.fn() }));
 
-import versionChangelog from "../index";
+import versionChangelog from "./index.js";
 
 const todayDate = formatDate(new Date());
 

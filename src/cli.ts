@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// @ts-check
-
 import fs from "fs";
 import upath from "upath";
 import versionChangelog from "./index.js";

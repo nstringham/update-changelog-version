@@ -1,28 +1,22 @@
-// @ts-check
-
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { runCommand } from "./run-command";
+import { runCommand } from "./run-command.js";
 
-const PACKAGE_MANAGERS = /** @type {const} */ (["npm", "yarn", "pnpm"]);
+const PACKAGE_MANAGERS = ["npm", "yarn", "pnpm"] as const;
 
-/** @typedef {typeof PACKAGE_MANAGERS[number]} PackageManager */
+type PackageManager = (typeof PACKAGE_MANAGERS)[number];
 
-/**
- * Checks if the given string is a valid package manager
- * @param {string} packageManager
- * @returns {packageManager is PackageManager}
- */
-export function isPackageManager(packageManager) {
-  return /** @type {readonly string[]} */ (PACKAGE_MANAGERS).includes(packageManager);
+/** Checks if the given string is a valid package manager */
+export function isPackageManager(packageManager: string): packageManager is PackageManager {
+  return (PACKAGE_MANAGERS as readonly string[]).includes(packageManager);
 }
 
 /**
  * Checks if a file exists
- * @param {string} path - The path to the file
- * @returns {Promise<boolean>} True if the file exists, false otherwise
+ * @param path - The path to the file
+ * @returns True if the file exists, false otherwise
  */
-async function exists(path) {
+async function exists(path: string): Promise<boolean> {
   try {
     await access(path);
     return true;
@@ -33,10 +27,9 @@ async function exists(path) {
 
 /**
  * Detects which package manager is being used
- * @param {string} cwd - The directory to check for the package manager
- * @returns {Promise<PackageManager>}
+ * @param cwd - The directory to check for the package manager
  */
-export async function detectPackageManager(cwd) {
+export async function detectPackageManager(cwd: string): Promise<PackageManager> {
   const packageJson = JSON.parse(await readFile(join(cwd, "package.json"), "utf-8"));
   const packageManager = getPackageManagerFromPackageJson(packageJson);
   if (packageManager != null) {
@@ -52,12 +45,8 @@ export async function detectPackageManager(cwd) {
   return "npm";
 }
 
-/**
- * Gets the name of the package manager from package.json
- * @param {{[key: string]: unknown}} packageJson
- * @returns {PackageManager | null} The detected package manager or null if not found
- */
-function getPackageManagerFromPackageJson(packageJson) {
+/** Gets the name of the package manager from package.json */
+function getPackageManagerFromPackageJson(packageJson: Record<string, unknown>): PackageManager | null {
   if ("packageManager" in packageJson && typeof packageJson.packageManager === "string") {
     const packageManager = packageJson.packageManager.split("@")[0];
     if (isPackageManager(packageManager)) {
@@ -86,19 +75,14 @@ function getPackageManagerFromPackageJson(packageJson) {
   return null;
 }
 
-/** @type {{ readonly [key in PackageManager]: string }} */
 const VERSION_PREFIX_COMMANDS = {
   npm: "npm config get tag-version-prefix",
   yarn: "yarn config get version-tag-prefix",
   pnpm: "pnpm config get tag-version-prefix",
-};
+} as const satisfies { [key in PackageManager]: string };
 
-/**
- * Gets the version prefix configured for a given package manger
- * @param {PackageManager} packageManager
- * @returns {string} The version prefix or null if not found
- */
-export function getVersionPrefix(packageManager) {
+/** Gets the version prefix configured for a given package manger */
+export function getVersionPrefix(packageManager: PackageManager): string {
   const output = runCommand(VERSION_PREFIX_COMMANDS[packageManager]).trim();
   if (output == "" || output == String(undefined)) {
     return "v";

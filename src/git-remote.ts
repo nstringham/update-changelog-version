@@ -1,12 +1,10 @@
-// @ts-check
-
 import { runCommand } from "./run-command.js";
 
 /**
  * Gets the URL of the git remote origin
- * @returns {string} The URL of the git remote origin
+ * @returns The URL of the git remote origin
  */
-export default function gitRemote() {
+export default function gitRemote(): string {
   var remoteUrl = runCommand("git config --get remote.origin.url").trim();
 
   if (!remoteUrl) {

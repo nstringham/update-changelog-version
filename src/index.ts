@@ -1,34 +1,37 @@
 #!/usr/bin/env node
 
-// @ts-check
-
 import githubUrlFromGit from "github-url-from-git";
+// @ts-expect-error - Dependency lacks type definitions
 import bitbucketUrlFromGit from "bitbucket-url-from-git";
+// @ts-expect-error - Dependency lacks type definitions
 import { parse as gitlabUrlFromGit } from "giturl";
-import gitRemote from "./util/git-remote";
-import { detectPackageManager, getVersionPrefix } from "./util/package-manager.js";
-import { formatDate } from "./util/format-date.js";
+import gitRemote from "./git-remote.js";
+import { detectPackageManager, getVersionPrefix } from "./package-manager.js";
+import { formatDate } from "./format-date.js";
 
 /**
  * Replaces the "Unreleased" heading with a new version heading including the date.
- * @argument {string} data The changelog markdown
- * @argument {string} versionString The new version
- * @returns {string} The updated changelog markdown
+ * @argument data The changelog markdown
+ * @argument versionString The new version
+ * @returns The updated changelog markdown
  */
-function insertHeading(data, versionString) {
+function insertHeading(data: string, versionString: string): string {
   return data.replace(/(## \[Unreleased\].*)/g, "$1\n\n## [" + versionString + "][] - " + formatDate(new Date()));
 }
 
-/** @typedef {{unreleased: string, previous: string}} UriResult */
+type UriResult = {
+  unreleased: string;
+  previous: string;
+};
 
 /**
  * Gets the GitHub URLs for the unreleased and previous versions.
- * @param {string} data The changelog markdown
- * @param {string} newVersion The new version
- * @param {string} prefix The version prefix
- * @returns {UriResult} The GitHub URLs for the unreleased and previous versions
+ * @param data The changelog markdown
+ * @param newVersion The new version
+ * @param prefix The version prefix
+ * @returns The GitHub URLs for the unreleased and previous versions
  */
-function githubUris(data, newVersion, prefix) {
+function githubUris(data: string, newVersion: string, prefix: string): UriResult {
   var remoteUrl;
   var previousVersion;
   var previousLink;
@@ -59,12 +62,12 @@ function githubUris(data, newVersion, prefix) {
 
 /**
  * Gets the Bitbucket URLs for the unreleased and previous versions.
- * @param {string} data The changelog markdown
- * @param {string} newVersion The new version
- * @param {string} prefix The version prefix
- * @returns {UriResult} The Bitbucket URLs for the unreleased and previous versions
+ * @param data The changelog markdown
+ * @param newVersion The new version
+ * @param prefix The version prefix
+ * @returns The Bitbucket URLs for the unreleased and previous versions
  */
-function bitbucketUris(data, newVersion, prefix) {
+function bitbucketUris(data: string, newVersion: string, prefix: string): UriResult {
   var remoteUrl;
   var previousVersion;
   var previousLink;
@@ -96,12 +99,12 @@ function bitbucketUris(data, newVersion, prefix) {
 
 /**
  * Gets the GitLab URLs for the unreleased and previous versions.
- * @param {string} data The changelog markdown
- * @param {string} newVersion The new version
- * @param {string} prefix The version prefix
- * @returns {UriResult} The GitLab URLs for the unreleased and previous versions
+ * @param data The changelog markdown
+ * @param newVersion The new version
+ * @param prefix The version prefix
+ * @returns The GitLab URLs for the unreleased and previous versions
  */
-function gitlabUris(data, newVersion, prefix) {
+function gitlabUris(data: string, newVersion: string, prefix: string): UriResult {
   var remoteUrl;
   var previousVersion;
   var previousLink;
@@ -130,22 +133,22 @@ function gitlabUris(data, newVersion, prefix) {
   };
 }
 
-/** @typedef {"github" | "gitlab" | "bitbucket"} Remote */
-
 const UriFunctions = {
   github: githubUris,
   gitlab: gitlabUris,
   bitbucket: bitbucketUris,
-};
+} as const;
+
+type Remote = keyof typeof UriFunctions;
 
 /**
  * Updates the urls of the changelog for the given version and remote repository
- * @param {string} data The changelog markdown
- * @param {string} versionString The new version
- * @param {Remote} remote The remote repository type
- * @returns {Promise<string>} The updated changelog markdown
+ * @param data The changelog markdown
+ * @param versionString The new version
+ * @param remote The remote repository type
+ * @returns The updated changelog markdown
  */
-async function updateCompareUri(data, versionString, remote) {
+async function updateCompareUri(data: string, versionString: string, remote: Remote): Promise<string> {
   const packageManager = await detectPackageManager(process.cwd());
   const prefix = getVersionPrefix(packageManager);
   const uris = UriFunctions[remote](data, versionString, prefix);
@@ -159,11 +162,14 @@ async function updateCompareUri(data, versionString, remote) {
 
 /**
  * Update the changelog with the new version and remote repository URLs
- * @param {string} data the changelog markdown
- * @param {{version: string, remote?: Remote}} version The version and remote repository type
- * @return {Promise<string>} the modified changelog markdown
+ * @param data the changelog markdown
+ * @param version The version and remote repository type
+ * @return the modified changelog markdown
  */
-export default async function versionChangelog(data, { version, remote }) {
+export default async function versionChangelog(
+  data: string,
+  { version, remote }: { version: string; remote?: Remote },
+): Promise<string> {
   // Add the heading for the new version number
   data = insertHeading(data, version);
 

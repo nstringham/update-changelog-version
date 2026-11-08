@@ -1,9 +1,7 @@
-// @ts-check
-
 import { describe, it, beforeEach, expect, vi } from "vitest";
-import { detectPackageManager, getVersionPrefix } from "../util/package-manager.js";
+import { detectPackageManager, getVersionPrefix } from "./package-manager.js";
 import { readFile, access } from "node:fs/promises";
-import { runCommand } from "../util/run-command.js";
+import { runCommand } from "./run-command.js";
 
 vi.mock(import("node:fs/promises"), () => ({
   readFile: vi.fn(),
@@ -18,7 +16,7 @@ vi.mock(import("node:path"), async (importOriginal) => {
   };
 });
 
-vi.mock(import("../util/run-command.js"), () => ({
+vi.mock(import("./run-command.js"), () => ({
   runCommand: vi.fn(),
 }));
 
