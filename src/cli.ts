@@ -11,7 +11,7 @@ const argv = minimist(process.argv.slice(2));
 
 const validRemotes = ["bitbucket", "github", "gitlab"];
 
-let fileName = argv._[0] || "CHANGELOG.md";
+let fileName = argv._[0] ?? "CHANGELOG.md";
 const remote = validRemotes.includes(argv.remote) ? argv.remote : "github";
 
 if (!upath.isAbsolute(fileName)) {

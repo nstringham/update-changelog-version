@@ -175,7 +175,7 @@ export default async function versionChangelog(
 
   // Update the [Unreleased] URI
   // and add the new version URI
-  data = await updateCompareUri(data, version, remote ? remote : "github");
+  data = await updateCompareUri(data, version, remote ?? "github");
 
   return data;
 }
