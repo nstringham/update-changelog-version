@@ -35,8 +35,7 @@
   "dependencies": {
     "bitbucket-url-from-git": "^1.0.0",
     "github-url-from-git": "^1.4.0",
-    "giturl": "^1.0.0",
-    "upath": "^1.1.0"
+    "giturl": "^1.0.0"
   },
   "devDependencies": {
     "@types/github-url-from-git": "^1.5.3",

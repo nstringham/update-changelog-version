@@ -216,9 +216,6 @@ importers:
       giturl:
         specifier: ^1.0.0
         version: 1.0.0
-      upath:
-        specifier: ^1.1.0
-        version: 1.1.0
     devDependencies:
       '@types/github-url-from-git':
         specifier: ^1.5.3
@@ -1045,10 +1042,6 @@ packages:
   undici-types@8.9.0:
     resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
-  upath@1.1.0:
-    resolution: {integrity: sha512-bzpH/oBhoS/QI/YtbkqCg6VEiPYjSZtrHQM6/QnJS6OL9pKUFLqb3aFh4Scvwm45+7iAgiMkLhSbaZxUqmrprw==}
-    engines: {node: '>=4'}
-
   vite@8.3.5:
     resolution: {integrity: sha512-z1YpjieJ9g0ebTmQpLBv/oq9E3F9EIlOe+7LahW8SrE3LTiG3udBRUXQOlYXP9b+IC2q2phHeVxj9xGlw34OEQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -1675,8 +1668,6 @@ snapshots:
       '@typescript/typescript-win32-x64': 7.0.2
 
   undici-types@8.9.0: {}
-
-  upath@1.1.0: {}
 
   vite@8.3.5(@types/node@26.6.6):
     dependencies:

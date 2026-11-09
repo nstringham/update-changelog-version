@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import fs from "fs";
-import upath from "upath";
 import versionChangelog from "./index.js";
 import { parseArgs } from "node:util";
+import { join, resolve } from "node:path";
 
-const packageJson = require(upath.join(process.cwd(), "package.json"));
+const packageJson = require(join(process.cwd(), "package.json"));
 
 const { values, positionals } = parseArgs({
   args: process.argv.slice(2),
@@ -19,12 +19,8 @@ function isValidRemote(remote: unknown): remote is (typeof validRemotes)[number]
   return typeof remote === "string" && (validRemotes as readonly string[]).includes(remote);
 }
 
-let fileName = positionals[0] ?? "CHANGELOG.md";
+const fileName = resolve(positionals[0] ?? "CHANGELOG.md");
 const remote = isValidRemote(values.remote) ? values.remote : "github";
-
-if (!upath.isAbsolute(fileName)) {
-  fileName = upath.normalize(upath.join(process.cwd(), fileName));
-}
 
 // Grab the current version of the package.
 // When run as part of the `"version"` script
