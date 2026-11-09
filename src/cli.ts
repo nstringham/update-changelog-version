@@ -3,16 +3,24 @@
 import fs from "fs";
 import upath from "upath";
 import versionChangelog from "./index.js";
-import minimist from "minimist";
+import { parseArgs } from "node:util";
 
 const packageJson = require(upath.join(process.cwd(), "package.json"));
 
-const argv = minimist(process.argv.slice(2));
+const { values, positionals } = parseArgs({
+  args: process.argv.slice(2),
+  allowPositionals: true,
+  options: { remote: { type: "string" } },
+});
 
-const validRemotes = ["bitbucket", "github", "gitlab"];
+const validRemotes = ["bitbucket", "github", "gitlab"] as const;
 
-let fileName = argv._[0] ?? "CHANGELOG.md";
-const remote = validRemotes.includes(argv.remote) ? argv.remote : "github";
+function isValidRemote(remote: unknown): remote is (typeof validRemotes)[number] {
+  return typeof remote === "string" && (validRemotes as readonly string[]).includes(remote);
+}
+
+let fileName = positionals[0] ?? "CHANGELOG.md";
+const remote = isValidRemote(values.remote) ? values.remote : "github";
 
 if (!upath.isAbsolute(fileName)) {
   fileName = upath.normalize(upath.join(process.cwd(), fileName));
