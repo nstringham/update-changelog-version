@@ -38,7 +38,6 @@
     "giturl": "^1.0.0"
   },
   "devDependencies": {
-    "@types/github-url-from-git": "^1.5.3",
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^5.1.0",
     "oxfmt": "^0.77.0",

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import githubUrlFromGit from "github-url-from-git";
 // @ts-expect-error - Dependency lacks type definitions
 import bitbucketUrlFromGit from "bitbucket-url-from-git";
 // @ts-expect-error - Dependency lacks type definitions
@@ -8,6 +7,7 @@ import { parse as gitlabUrlFromGit } from "giturl";
 import gitRemote from "./git-remote.js";
 import { detectPackageManager, getVersionPrefix } from "./package-manager.js";
 import { formatDate } from "./format-date.js";
+import { GitHub, isBrowserUrl } from "./remote.js";
 
 /**
  * Replaces the "Unreleased" heading with a new version heading including the date.
@@ -32,7 +32,7 @@ type UriResult = {
  * @returns The GitHub URLs for the unreleased and previous versions
  */
 function githubUris(data: string, newVersion: string, prefix: string): UriResult {
-  let remoteUrl: string | undefined;
+  let remote: GitHub | undefined;
   let previousVersion: string | undefined;
   let previousLink: string;
 
@@ -40,22 +40,20 @@ function githubUris(data: string, newVersion: string, prefix: string): UriResult
   const match = /\[Unreleased\]: (.*)\/compare\/(.*)\.\.\.HEAD/g.exec(data);
 
   if (match) {
-    remoteUrl = match[1];
+    if (isBrowserUrl(match[1])) {
+      remote = GitHub.fromBrowserUrl(match[1]);
+    }
     previousVersion = match[2];
   }
 
-  if (!remoteUrl) {
-    remoteUrl = githubUrlFromGit(gitRemote());
+  if (!remote) {
+    remote = GitHub.fromGitUrl(gitRemote());
   }
 
-  if (previousVersion) {
-    previousLink = "[" + newVersion + "]: " + remoteUrl + "/compare/" + previousVersion + "..." + prefix + newVersion;
-  } else {
-    previousLink = "[" + newVersion + "]: " + remoteUrl + "/tree/" + prefix + newVersion;
-  }
+  previousLink = "[" + newVersion + "]: " + remote.getChangesUrl(previousVersion ?? null, prefix + newVersion);
 
   return {
-    unreleased: "[Unreleased]: " + remoteUrl + "/compare/" + prefix + newVersion + "...HEAD",
+    unreleased: "[Unreleased]: " + remote.getChangesUrl(prefix + newVersion, null),
     previous: previousLink,
   };
 }
