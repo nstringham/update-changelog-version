@@ -6,6 +6,7 @@ export type GitUrl =
   | `git+https://${string}/${string}`
   | `git@${string}:${string}`
   | `git+ssh://${string}/${string}`
+  | `ssh://git@${string}/${string}`
   | `git://${string}/${string}`;
 
 export function isGitUrl(url: string): url is GitUrl {

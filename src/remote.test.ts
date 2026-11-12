@@ -57,6 +57,13 @@ describe("GitHub", () => {
       const gitUrl = "https://EastCloud@github.com/EastCloud/node-websockets.git";
       expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/EastCloud/node-websockets");
     });
+
+    it("should parse ssh://git@ssh.github.com:443/nstringham/update-changelog-version.git", () => {
+      const gitUrl = "ssh://git@ssh.github.com:443/nstringham/update-changelog-version.git";
+      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://github.com/nstringham/update-changelog-version",
+      );
+    });
   });
 
   describe("getChangesUrl", () => {
