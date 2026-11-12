@@ -1,20 +1,4 @@
-export type GitUrl =
-  | `https://${string}/${string}`
-  | `git+https://${string}/${string}`
-  | `git@${string}:${string}`
-  | `git+ssh://${string}/${string}`
-  | `ssh://git@${string}/${string}`
-  | `git://${string}/${string}`;
-
-export function isGitUrl(url: string): url is GitUrl {
-  return /^(https:\/\/|git\+https:\/\/|git@|git\+ssh:\/\/|ssh:\/\/git@|git:\/\/)/.test(url);
-}
-
 export type BrowserUrl = `https://${string}`;
-
-export function isBrowserUrl(url: string): url is BrowserUrl {
-  return url.startsWith("https://");
-}
 
 export interface Remote {
   /**
@@ -39,7 +23,7 @@ export class GitHub implements Remote {
     this.repo = repo;
   }
 
-  static fromUrl(url: GitUrl | BrowserUrl): GitHub {
+  static fromUrl(url: string): GitHub {
     const match = url?.match(/github\.com(?::[0-9]*)?\/?(?<owner>[^/.]+)\/(?<repo>[^/.]+)/);
     if (match?.groups?.owner === undefined || match?.groups?.repo === undefined) {
       throw new Error(`Invalid GitHub URL: ${url}`);

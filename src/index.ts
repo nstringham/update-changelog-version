@@ -7,7 +7,7 @@ import { parse as gitlabUrlFromGit } from "giturl";
 import gitRemote from "./git-remote.js";
 import { detectPackageManager, getVersionPrefix } from "./package-manager.js";
 import { formatDate } from "./format-date.js";
-import { GitHub, isBrowserUrl } from "./remote.js";
+import { GitHub } from "./remote.js";
 
 /**
  * Replaces the "Unreleased" heading with a new version heading including the date.
@@ -40,9 +40,7 @@ function githubUris(data: string, newVersion: string, prefix: string): UriResult
   const match = /\[Unreleased\]: (.*)\/compare\/(.*)\.\.\.HEAD/g.exec(data);
 
   if (match) {
-    if (isBrowserUrl(match[1])) {
-      remote = GitHub.fromUrl(match[1]);
-    }
+    remote = GitHub.fromUrl(match[1]);
     previousVersion = match[2];
   }
 
