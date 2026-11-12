@@ -7,7 +7,7 @@ export type GitUrl =
   | `git://${string}/${string}`;
 
 export function isGitUrl(url: string): url is GitUrl {
-  return /^(https:\/\/|git\+https:\/\/|git@|git\+ssh:\/\/|git:\/\/)/.test(url);
+  return /^(https:\/\/|git\+https:\/\/|git@|git\+ssh:\/\/|ssh:\/\/git@|git:\/\/)/.test(url);
 }
 
 export type BrowserUrl = `https://${string}`;
