@@ -2,67 +2,75 @@ import { describe, it, expect } from "vitest";
 import { GitHub } from "./remote.js";
 
 describe("GitHub", () => {
-  describe("fromGitUrl", () => {
+  describe("fromUrl", () => {
     it("should support git://*", () => {
       const gitUrl = "git://github.com/jamesor/mongoose-versioner";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/jamesor/mongoose-versioner");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/jamesor/mongoose-versioner");
     });
 
     it("should support git://*.git", () => {
       const gitUrl = "git://github.com/treygriffith/cellar.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/treygriffith/cellar");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/treygriffith/cellar");
     });
 
     it("should support https://*", () => {
       const gitUrl = "https://github.com/Empeeric/i18n-node";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/Empeeric/i18n-node");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/Empeeric/i18n-node");
     });
 
     it("should support https://*.git", () => {
       const gitUrl = "https://jpillora@github.com/banchee/tranquil.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/banchee/tranquil");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/banchee/tranquil");
     });
 
     it("should throw error on failure", () => {
       const gitUrl = "git://github.com/justgord/.git";
-      expect(() => GitHub.fromGitUrl(gitUrl)).toThrow("Invalid GitHub URL");
+      expect(() => GitHub.fromUrl(gitUrl)).toThrow("Invalid GitHub URL");
     });
 
     it("should parse git@github.com:bcoe/thumbd.git", () => {
       const gitUrl = "git@github.com:bcoe/thumbd.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
     });
 
     it("should parse git@github.com:/bcoe/thumbd.git", () => {
       const gitUrl = "git@github.com:/bcoe/thumbd.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
     });
 
     it("should parse git@github.com:bcoe/thumbd.git#2.7.0", () => {
       const gitUrl = "git@github.com:bcoe/thumbd.git#2.7.0";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
     });
 
     it("should parse git+https://github.com/bcoe/thumbd.git", () => {
       const gitUrl = "git+https://github.com/bcoe/thumbd.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
     });
 
     it("should parse git+ssh://github.com/bcoe/thumbd.git", () => {
       const gitUrl = "git+ssh://github.com/bcoe/thumbd.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/bcoe/thumbd");
     });
 
     it("should parse https://EastCloud@github.com/EastCloud/node-websockets.git", () => {
       const gitUrl = "https://EastCloud@github.com/EastCloud/node-websockets.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/EastCloud/node-websockets");
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/EastCloud/node-websockets");
     });
 
     it("should parse ssh://git@ssh.github.com:443/nstringham/update-changelog-version.git", () => {
       const gitUrl = "ssh://git@ssh.github.com:443/nstringham/update-changelog-version.git";
-      expect(GitHub.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
-        "https://github.com/nstringham/update-changelog-version",
-      );
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
+    });
+
+    it("should parse https://github.com/nstringham/update-changelog-version/tree/v1.0.0", () => {
+      const gitUrl = "https://github.com/nstringham/update-changelog-version/tree/v1.0.0";
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
+    });
+
+    it("should parse https://github.com/nstringham/update-changelog-version/compare/v1.0.0...HEAD", () => {
+      const gitUrl = "https://github.com/nstringham/update-changelog-version/compare/v1.0.0...HEAD";
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
     });
   });
 

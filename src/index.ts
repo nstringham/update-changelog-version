@@ -41,13 +41,13 @@ function githubUris(data: string, newVersion: string, prefix: string): UriResult
 
   if (match) {
     if (isBrowserUrl(match[1])) {
-      remote = GitHub.fromBrowserUrl(match[1]);
+      remote = GitHub.fromUrl(match[1]);
     }
     previousVersion = match[2];
   }
 
   if (!remote) {
-    remote = GitHub.fromGitUrl(gitRemote());
+    remote = GitHub.fromUrl(gitRemote());
   }
 
   previousLink = "[" + newVersion + "]: " + remote.getChangesUrl(previousVersion ?? null, prefix + newVersion);

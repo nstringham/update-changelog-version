@@ -1,6 +1,3 @@
-// @ts-expect-error - Dependency lacks accurate type definitions
-import githubUrlFromGit from "github-url-from-git";
-
 export type GitUrl =
   | `https://${string}/${string}`
   | `git+https://${string}/${string}`
@@ -42,20 +39,12 @@ export class GitHub implements Remote {
     this.repo = repo;
   }
 
-  static fromGitUrl(url: GitUrl): GitHub {
-    const gitHubUrl: BrowserUrl | undefined = githubUrlFromGit(url);
-    if (gitHubUrl == null) {
+  static fromUrl(url: GitUrl | BrowserUrl): GitHub {
+    const match = url?.match(/github\.com(?::[0-9]*)?\/?(?<owner>[^/.]+)\/(?<repo>[^/.]+)/);
+    if (match?.groups?.owner === undefined || match?.groups?.repo === undefined) {
       throw new Error(`Invalid GitHub URL: ${url}`);
     }
-    return GitHub.fromBrowserUrl(gitHubUrl);
-  }
-
-  static fromBrowserUrl(url: BrowserUrl): GitHub {
-    const match = url?.match(/github\.com\/([^/]+)\/([^/]+)(?:\.git)?$/);
-    if (match == null) {
-      throw new Error(`Invalid GitHub URL: ${url}`);
-    }
-    return new GitHub(match[1], match[2]);
+    return new GitHub(match.groups.owner, match.groups.repo);
   }
 
   getRepositoryUrl(): BrowserUrl {
