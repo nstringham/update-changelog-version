@@ -7,5 +7,5 @@ import { execSync } from "child_process";
  * @throws If the command fails
  */
 export function runCommand(command: string): string {
-  return execSync(command, { encoding: "utf-8", windowsHide: true });
+  return execSync(command, { encoding: "utf-8", windowsHide: true }).trim();
 }

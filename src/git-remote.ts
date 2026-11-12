@@ -17,7 +17,7 @@ export function isGitUrl(url: string): url is GitUrl {
  * @returns The URL of the git remote origin
  */
 export default function gitRemote(): GitUrl {
-  const remoteUrl = runCommand("git config --get remote.origin.url").trim();
+  const remoteUrl = runCommand("git config --get remote.origin.url");
 
   if (!remoteUrl) {
     throw new Error(
