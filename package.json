@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "bitbucket-url-from-git": "^1.0.2",
-    "giturl": "^1.0.0"
+    "giturl": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
