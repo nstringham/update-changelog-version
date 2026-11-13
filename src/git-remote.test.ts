@@ -29,7 +29,7 @@ describe("gitRemote", () => {
 
     expect(gitRemote()).toBe("https://github.com/user/repo.git");
 
-    expect(vi.mocked(runCommand)).toHaveBeenCalledWith("git config --get remote.origin.url");
+    expect(vi.mocked(runCommand)).toHaveBeenCalledExactlyOnceWith("git config --get remote.origin.url");
   });
 
   it("should throw an error if no remote is configured", () => {
