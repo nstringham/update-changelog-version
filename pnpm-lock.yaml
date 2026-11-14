@@ -211,8 +211,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       giturl:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       '@types/node':
         specifier: ^26.6.6
@@ -850,9 +850,9 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  giturl@1.0.0:
-    resolution: {integrity: sha512-xwXgqGaS7vF+1Eoy7r4HIk8B4LOfFluikltEpQfhHsYsUV8BuQ3u7NN3di/bIx/BGyGZWo+o9JSXI51cFDzYIg==}
-    engines: {node: '>= 0.10.0'}
+  giturl@2.0.0:
+    resolution: {integrity: sha512-FB0MmghWLcqsyrBZyqsLCNeS2kIzYymT34t/6BxM5R0/9Pxvj0K1eK25SBbwRHMjKMLgQ7nYqBSduF6XyfkgFg==}
+    engines: {node: '>= 14.17.0'}
 
   js-tokens@10.0.0:
     resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
@@ -1457,7 +1457,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  giturl@1.0.0: {}
+  giturl@2.0.0: {}
 
   js-tokens@10.0.0: {}
 
