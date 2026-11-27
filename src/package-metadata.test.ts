@@ -6,6 +6,14 @@ vi.mock(import("node:fs/promises"), () => ({
   readFile: vi.fn(),
 }));
 
+vi.mock(import("node:path"), async (importOriginal) => {
+  const originalModule = await importOriginal();
+  return {
+    ...originalModule,
+    join: originalModule.posix.join,
+  };
+});
+
 describe("parsePackageMetadata", () => {
   it("should parse the version", () => {
     expect(parsePackageMetadata({ version: "1.0.0" })).toEqual({
