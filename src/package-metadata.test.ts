@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { parsePackageMetadata, readPackageFile } from "./package-metadata.js";
 import { readFile } from "node:fs/promises";
 
@@ -171,6 +171,10 @@ describe("parsePackageMetadata", () => {
 });
 
 describe("readPackageFile", () => {
+  beforeEach(() => {
+    vi.mocked(readFile).mockClear();
+  });
+
   it("should read package.json in the directory", async () => {
     vi.mocked(readFile).mockResolvedValue('{ "version": "1.0.0" }');
     await expect(readPackageFile("cwd")).resolves.toEqual({ version: "1.0.0" });
